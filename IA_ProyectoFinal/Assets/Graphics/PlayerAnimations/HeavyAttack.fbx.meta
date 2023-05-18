@@ -1,11 +1,14 @@
 fileFormatVersion: 2
-guid: 5c314fb0af1166a4a94f8b4624915bcd
+guid: ac7bf11b5cf74da4f8a9e0ff26911e37
 ModelImporter:
   serializedVersion: 21300
   internalIDToNameTable:
   - first:
       74: -203655887218126122
-    second: Sprint
+    second: mixamo.com
+  - first:
+      74: 6177523420205426390
+    second: HeavyAttack
   externalObjects: {}
   materials:
     materialImportMode: 2
@@ -36,18 +39,18 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Sprint
+      name: HeavyAttack
       takeName: mixamo.com
       internalID: 0
       firstFrame: 0
-      lastFrame: 17
+      lastFrame: 73
       wrapMode: 0
       orientationOffsetY: 0
-      level: 0.06
+      level: 0
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 1
+      loopTime: 0
       loopBlend: 0
       loopBlendOrientation: 1
       loopBlendPositionY: 1

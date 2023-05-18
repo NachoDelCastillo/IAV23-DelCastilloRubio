@@ -7,6 +7,8 @@ namespace NX
 {
     public class InputHandler : MonoBehaviour
     {
+        PlayerManager playerManager;
+
         public float horizontal;
         public float vertical;
         public float moveAmount;
@@ -15,31 +17,23 @@ namespace NX
 
         public bool b_input;
         public bool s_input;
+        public bool rb_input;
+        public bool rt_input;
+
         public bool rollFlag;
         public bool sprintFlag;
         public float rollInputTimer;
-        public bool isInteracting;
 
         PlayerControls inputActions;
-        CameraHandler cameraHandler;
+        PlayerAttacker playerAttacker;
 
         Vector2 movementInput;
         Vector2 cameraInput;
 
-        private void Start()
+        private void Awake()
         {
-            cameraHandler = CameraHandler.singleton;
-        }
-
-        private void FixedUpdate()
-        {
-            float delta = Time.deltaTime;
-
-            if (cameraHandler != null) {
-
-                cameraHandler.FollowTarget(delta);
-                cameraHandler.HandleCameraRotation(delta, mouseX, mouseY);
-            }
+            playerManager = GetComponent<PlayerManager>();
+            playerAttacker = GetComponent<PlayerAttacker>();
         }
 
         public void OnEnable()
@@ -64,6 +58,7 @@ namespace NX
             MoveInput(delta);
 
             HandleRollInput(delta);
+            HandleAttackInput(delta);
         }
 
         private void MoveInput(float delta)
@@ -112,6 +107,22 @@ namespace NX
 
             //    rollInputTimer= 0; 
             //}
+        }
+
+        private void HandleAttackInput(float delta)
+        {
+            inputActions.PlayerActions.RB.performed += i => rb_input = true;
+            inputActions.PlayerActions.RT.performed += i => rt_input = true;
+
+            if (rb_input)
+            {
+                if (!playerManager.isInteracting)
+                    playerAttacker.HandleLightAttack();
+            }
+            else if (rt_input)
+            {
+                playerAttacker.HandleHeavyAttack();
+            }
         }
     }
 }

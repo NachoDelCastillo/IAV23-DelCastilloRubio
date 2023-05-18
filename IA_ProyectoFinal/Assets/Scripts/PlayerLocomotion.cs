@@ -7,6 +7,7 @@ namespace NX
 {
     public class PlayerLocomotion : MonoBehaviour
     {
+        PlayerManager playerManager;
         Transform cameraObject;
         InputHandler inputHandler;
         Vector3 moveDirection;
@@ -19,7 +20,7 @@ namespace NX
         public new Rigidbody rigidbody;
         public GameObject normalCamera;
 
-        [Header("Stats")]
+        [Header("Movement Stats")]
         [SerializeField]
         float movementSpeed = 5;
         [SerializeField]
@@ -27,28 +28,15 @@ namespace NX
         [SerializeField]
         float rotationSpeed = 10;
 
-        public bool isSprinting;
-
         private void Start()
         {
+            playerManager = GetComponent<PlayerManager>();
             rigidbody = GetComponent<Rigidbody>();
             inputHandler = GetComponent<InputHandler>();
             animatorHandler = GetComponentInChildren<AnimatorHandler>();
             cameraObject = Camera.main.transform;
             myTransform = transform;
             animatorHandler.Initialize();
-        }
-
-        public void Update()
-        {
-            float delta = Time.deltaTime;
-
-            isSprinting = inputHandler.b_input;
-            inputHandler.TickInput(delta);
-
-            HandleMovement(delta);
-
-            HandleRollAndSprint(delta);
         }
 
         #region Movement
@@ -90,21 +78,30 @@ namespace NX
 
             float speed = movementSpeed;
 
-            if (inputHandler.sprintFlag)
+            if (inputHandler.sprintFlag && inputHandler.moveAmount > .5f)
             {
                 speed = sprintSpeed;
-                isSprinting= true;
+                playerManager.isSprinting = true;
                 moveDirection *= speed;
             }
             else
             {
-                moveDirection *= speed;
+                if (inputHandler.moveAmount < 0.5)
+                {
+                    moveDirection *= movementSpeed;
+                    playerManager.isSprinting = false;
+                }
+                else
+                {
+                    moveDirection *= speed;
+                    playerManager.isSprinting = false;
+                }
             }
 
             Vector3 projectedVelocity = Vector3.ProjectOnPlane(moveDirection, normalVector);
             rigidbody.velocity = projectedVelocity;
 
-            animatorHandler.UpdateAnimatorValues(inputHandler.moveAmount, 0, isSprinting);
+            animatorHandler.UpdateAnimatorValues(inputHandler.moveAmount, 0, playerManager.isSprinting);
 
             if (animatorHandler.canRotate)
                 HandleRotation(delta);
@@ -123,14 +120,14 @@ namespace NX
                 moveDirection = cameraObject.forward * inputHandler.vertical;
                 moveDirection += cameraObject.right * inputHandler.horizontal;
 
-                if (inputHandler.moveAmount > 0)
-                {
-                    animatorHandler.PlayTargetAnimation("Rolling", true);
-                    moveDirection.y = 0;
+                //if (inputHandler.moveAmount > 0)
+                //{
+                animatorHandler.PlayTargetAnimation("Rolling", true);
+                moveDirection.y = 0;
 
-                    Quaternion rollRotation = Quaternion.LookRotation(moveDirection);
-                    myTransform.rotation = rollRotation;
-                }
+                Quaternion rollRotation = Quaternion.LookRotation(moveDirection);
+                myTransform.rotation = rollRotation;
+                //}
             }
         }
 

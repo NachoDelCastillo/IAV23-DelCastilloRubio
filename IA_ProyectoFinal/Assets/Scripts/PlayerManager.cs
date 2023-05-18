@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace NX
 {
@@ -8,20 +9,54 @@ namespace NX
     {
         InputHandler inputHandler;
         Animator anim;
+        CameraHandler cameraHandler;
+        PlayerLocomotion playerLocomotion;
+
+        public bool isInteracting;
+
+        [Header("Player Flags")]
+        public bool isSprinting;
 
         private void Start()
         {
+            cameraHandler = CameraHandler.singleton;
+
             inputHandler = GetComponent<InputHandler>();
             anim = GetComponentInChildren<Animator>();
-        }
+            playerLocomotion = GetComponent<PlayerLocomotion>();
+        } 
 
         private void Update()
         {
-            inputHandler.isInteracting = anim.GetBool("isInteracting");
+            isInteracting = anim.GetBool("isInteracting");
 
+            float delta = Time.deltaTime;
+            inputHandler.TickInput(delta);
+            playerLocomotion.HandleMovement(delta);
+            playerLocomotion.HandleRollAndSprint(delta);
+        }
+
+
+        private void FixedUpdate()
+        {
+            float delta = Time.deltaTime;
+
+            if (cameraHandler != null)
+            {
+
+                cameraHandler.FollowTarget(delta);
+                cameraHandler.HandleCameraRotation(delta, inputHandler.mouseX, inputHandler.mouseY);
+            }
+        }
+
+
+        private void LateUpdate()
+        {
             inputHandler.rollFlag = false;
-
             inputHandler.sprintFlag = false;
+
+            inputHandler.rb_input = false;
+            inputHandler.rt_input = false;
         }
     }
 }
