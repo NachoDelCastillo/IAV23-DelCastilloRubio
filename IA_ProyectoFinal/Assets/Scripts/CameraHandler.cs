@@ -78,8 +78,6 @@ namespace NX
             if (Physics.SphereCast(cameraPivotTransform.position, cameraSphereRadius,
                 direction, out hit, Mathf.Abs(targetPosition), ignoreLayers))
             {
-                Debug.Log("ignoreLayers = " + ignoreLayers);
-
                 float dis = Vector3.Distance(cameraPivotTransform.position, hit.point);
                 targetPosition = -(dis - cameraCollisionOffset);
             }
