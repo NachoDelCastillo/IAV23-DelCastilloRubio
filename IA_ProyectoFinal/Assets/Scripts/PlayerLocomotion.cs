@@ -103,7 +103,7 @@ namespace NX
 
             animatorHandler.UpdateAnimatorValues(inputHandler.moveAmount, 0, playerManager.isSprinting);
 
-            if (animatorHandler.canRotate)
+            if (animatorHandler.canRotate && !playerManager.isInteracting)
                 HandleRotation(delta);
         }
 

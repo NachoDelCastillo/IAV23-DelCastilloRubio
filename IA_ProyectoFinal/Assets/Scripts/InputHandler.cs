@@ -114,14 +114,12 @@ namespace NX
             inputActions.PlayerActions.RB.performed += i => rb_input = true;
             inputActions.PlayerActions.RT.performed += i => rt_input = true;
 
-            if (rb_input)
+            if (!playerManager.isInteracting)
             {
-                if (!playerManager.isInteracting)
+                if (rb_input)
                     playerAttacker.HandleLightAttack();
-            }
-            else if (rt_input)
-            {
-                playerAttacker.HandleHeavyAttack();
+                else if (rt_input)
+                    playerAttacker.HandleHeavyAttack();
             }
         }
     }

@@ -39,8 +39,8 @@ ModelImporter:
       name: Rolling
       takeName: mixamo.com
       internalID: 0
-      firstFrame: 11
-      lastFrame: 51
+      firstFrame: 16
+      lastFrame: 50
       wrapMode: 0
       orientationOffsetY: 0
       level: -0.9
