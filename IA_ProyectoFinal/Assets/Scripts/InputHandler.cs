@@ -14,8 +14,10 @@ namespace NX
         public float mouseY;
 
         public bool b_input;
+        public bool s_input;
         public bool rollFlag;
-        public bool rollInputTimer;
+        public bool sprintFlag;
+        public float rollInputTimer;
         public bool isInteracting;
 
         PlayerControls inputActions;
@@ -77,11 +79,39 @@ namespace NX
         private void HandleRollInput(float delta)
         {
             b_input = inputActions.PlayerActions.Roll.WasPressedThisFrame();
+            s_input = inputActions.PlayerActions.Sprint.IsPressed();
+
+            //inputActions.PlayerActions.Roll.started += ctx => b_input = true;
+            //inputActions.PlayerActions.Roll.canceled += ctx => b_input = false;
+
 
             if (b_input)
             {
                 rollFlag = true;
+                sprintFlag = false;
             }
+
+            else if (s_input)
+            {
+                //rollFlag = false;
+                sprintFlag = true;
+            }
+
+            //if (b_input)
+            //{
+            //    rollInputTimer += delta;
+            //    sprintFlag = true;
+            //}
+            //else
+            //{
+            //    if (rollInputTimer > 0 && rollInputTimer < .5f)
+            //    {
+            //        sprintFlag = false;
+            //        rollFlag = true;
+            //    }
+
+            //    rollInputTimer= 0; 
+            //}
         }
     }
 }
