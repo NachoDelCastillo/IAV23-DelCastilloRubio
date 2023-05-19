@@ -43,6 +43,9 @@ namespace NX
                 inputActions = new PlayerControls();
                 inputActions.PlayerMovement.Movement.performed += inputActions => movementInput = inputActions.ReadValue<Vector2>();
                 inputActions.PlayerMovement.Camera.performed += i => cameraInput = i.ReadValue<Vector2>();
+
+                inputActions.PlayerActions.RB.performed += i => rb_input = true;
+                inputActions.PlayerActions.RT.performed += i => rt_input = true;
             }
 
             inputActions.Enable();
@@ -111,8 +114,6 @@ namespace NX
 
         private void HandleAttackInput(float delta)
         {
-            inputActions.PlayerActions.RB.performed += i => rb_input = true;
-            inputActions.PlayerActions.RT.performed += i => rt_input = true;
 
             if (!playerManager.isInteracting)
             {

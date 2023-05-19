@@ -13,7 +13,7 @@ namespace NX
 
         private void Awake()
         {
-            damageCollider = GetComponent<Collider>();
+            damageCollider = GetComponent<BoxCollider>();
             damageCollider.gameObject.SetActive(true);
             damageCollider.isTrigger = true;
             damageCollider.enabled = false;
