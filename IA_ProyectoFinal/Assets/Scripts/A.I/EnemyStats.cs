@@ -4,11 +4,8 @@ using UnityEngine;
 
 namespace NX
 {
-    public class EnemyStats : MonoBehaviour
+    public class EnemyStats : CharacterStats
     {
-        public int maxHealth;
-        public int currentHealth;
-
         Animator anim;
 
         private void Awake()

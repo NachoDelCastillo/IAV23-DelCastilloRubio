@@ -4,8 +4,8 @@ using UnityEngine;
 
 namespace NX
 {
-    public class EnemyManager : CharacterManager
+    public class EnemyAction : MonoBehaviour
     {
-
     }
+
 }
