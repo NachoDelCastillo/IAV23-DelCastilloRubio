@@ -15,6 +15,8 @@ namespace NX
         int vertical;
         public bool canRotate;
 
+        DamageCollider damageCollider;
+
         public void Initialize()
         {
             playerManager = GetComponentInParent<PlayerManager>();
@@ -23,6 +25,8 @@ namespace NX
             playerLocomotion = GetComponentInParent<PlayerLocomotion>();
             vertical = Animator.StringToHash("Vertical");
             horizontal = Animator.StringToHash("horizontal");
+
+            damageCollider = transform.parent.GetComponentInChildren<DamageCollider>();
         }
 
         public void UpdateAnimatorValues(float verticalMovement, float horizontalMovement, bool isSprinting)
@@ -102,6 +106,18 @@ namespace NX
             Vector3 velocity = deltaPosition / delta;
             playerLocomotion.rigidbody.velocity = velocity;
 
+        }
+
+
+
+        public void EnableDamageCollider()
+        {
+            damageCollider.EnableDamageCollider();
+        }
+
+        public void DisableDamageCollider()
+        {
+            damageCollider.DisableDamageCollider();
         }
     }
 }

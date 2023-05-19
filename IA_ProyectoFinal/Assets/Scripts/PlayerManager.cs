@@ -17,10 +17,13 @@ namespace NX
         [Header("Player Flags")]
         public bool isSprinting;
 
+        private void Awake()
+        {
+            cameraHandler = FindObjectOfType<CameraHandler>();
+        }
+
         private void Start()
         {
-            cameraHandler = CameraHandler.singleton;
-
             inputHandler = GetComponent<InputHandler>();
             anim = GetComponentInChildren<Animator>();
             playerLocomotion = GetComponent<PlayerLocomotion>();
