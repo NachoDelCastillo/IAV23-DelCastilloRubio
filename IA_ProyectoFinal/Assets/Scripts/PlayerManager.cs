@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 
 namespace NX
 {
-    public class PlayerManager : MonoBehaviour
+    public class PlayerManager : CharacterManager
     {
         InputHandler inputHandler;
         Animator anim;

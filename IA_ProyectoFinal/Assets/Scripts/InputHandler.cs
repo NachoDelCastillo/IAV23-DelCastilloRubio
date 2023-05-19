@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace NX
 {
@@ -19,13 +20,18 @@ namespace NX
         public bool s_input;
         public bool rb_input;
         public bool rt_input;
+        public bool lockOn_input;
+        public bool rightStick_right_input;
+        public bool rightStick_left_input;
 
         public bool rollFlag;
         public bool sprintFlag;
+        public bool lockOnFlag;
         public float rollInputTimer;
 
         PlayerControls inputActions;
         PlayerAttacker playerAttacker;
+        CameraHandler cameraHandler;
 
         Vector2 movementInput;
         Vector2 cameraInput;
@@ -34,6 +40,7 @@ namespace NX
         {
             playerManager = GetComponent<PlayerManager>();
             playerAttacker = GetComponent<PlayerAttacker>();
+            cameraHandler = FindObjectOfType<CameraHandler>();
         }
 
         public void OnEnable()
@@ -46,6 +53,10 @@ namespace NX
 
                 inputActions.PlayerActions.RB.performed += i => rb_input = true;
                 inputActions.PlayerActions.RT.performed += i => rt_input = true;
+                inputActions.PlayerActions.LockOn.performed += i => lockOn_input = true;
+
+                inputActions.PlayerMovement.LockOnTargetLeft.performed+= i => rightStick_left_input = true;
+                inputActions.PlayerMovement.LockOnTargetRight.performed+= i => rightStick_right_input = true;
             }
 
             inputActions.Enable();
@@ -62,6 +73,7 @@ namespace NX
 
             HandleRollInput(delta);
             HandleAttackInput(delta);
+            HandleLockOnInput();
         }
 
         private void MoveInput(float delta)
@@ -121,6 +133,46 @@ namespace NX
                     playerAttacker.HandleLightAttack();
                 else if (rt_input)
                     playerAttacker.HandleHeavyAttack();
+            }
+        }
+
+
+        private void HandleLockOnInput()
+        {
+            if (lockOn_input && !lockOnFlag)
+            {
+                //cameraHandler.ClearLockOnTargets();
+                lockOn_input = false;
+                lockOnFlag = true;
+                cameraHandler.HandleLockOn();
+                if (cameraHandler.nearestLockOnTarget != null)
+                {
+                    cameraHandler.currentLockOnTarget = cameraHandler.nearestLockOnTarget;
+                    lockOnFlag = true;
+                }
+            }
+            else if (lockOn_input && lockOnFlag)
+            {
+                lockOn_input = false;
+                lockOnFlag = false;
+
+                cameraHandler.ClearLockOnTargets();
+            }
+
+            if (lockOnFlag && rightStick_left_input)
+            {
+                rightStick_left_input= false;
+                cameraHandler.HandleLockOn();
+                if (cameraHandler.leftLockTarget != null)
+                    cameraHandler.currentLockOnTarget = cameraHandler.leftLockTarget;
+            }
+
+            if (lockOnFlag && rightStick_right_input)
+            {
+                rightStick_right_input = false;
+                cameraHandler.HandleLockOn();
+                if (cameraHandler.rightLockTarget != null)
+                    cameraHandler.currentLockOnTarget = cameraHandler.rightLockTarget;
             }
         }
     }
