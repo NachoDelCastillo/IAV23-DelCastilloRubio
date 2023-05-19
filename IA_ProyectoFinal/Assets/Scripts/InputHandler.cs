@@ -69,14 +69,14 @@ namespace NX
 
         public void TickInput(float delta)
         {
-            MoveInput(delta);
+            HandleMoveInput(delta);
 
             HandleRollInput(delta);
             HandleAttackInput(delta);
             HandleLockOnInput();
         }
 
-        private void MoveInput(float delta)
+        private void HandleMoveInput(float delta)
         {
             horizontal = movementInput.x;
             vertical = movementInput.y;
@@ -174,6 +174,8 @@ namespace NX
                 if (cameraHandler.rightLockTarget != null)
                     cameraHandler.currentLockOnTarget = cameraHandler.rightLockTarget;
             }
+
+            cameraHandler.SetCameraHeight();
         }
     }
 }
