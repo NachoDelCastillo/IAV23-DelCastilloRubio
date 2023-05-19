@@ -4,8 +4,8 @@ using UnityEngine;
 
 namespace NX
 {
-    public class EnemyAction : MonoBehaviour
+    public class EnemyAction : ScriptableObject
     {
+        public string actionAnimation;
     }
-
 }
