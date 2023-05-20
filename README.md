@@ -9,6 +9,7 @@ El objetivo de esta practica final consiste en crear una inteligencia artificial
 
 
 <td><img src="https://github.com/NachoDelCastillo/IAV23-DelCastilloRubio/blob/main/ReadmeImages/EldenRing_01.jpg" /></td>
+(Elden Ring)
 
 
 **PRUEBA**
