@@ -8,7 +8,8 @@ El estado actual del juego (viernes 19 de mayo de 2023) constiste en:
 - La infraestructura y la interfaz que muestra la salud actual del jugador.
 - Un enemigo con un funcionamiento basico de momento, en el que puede perseguir al jugador y atacarlo. Tambien puede recibir daño.
 
-<td><img src="https://github.com/NachoDelCastillo/IAV23-DelCastilloRubio/blob/main/ReadmeImages/EstadoProyecto.gif" /></td>
+<td><img src="https://github.com/NachoDelCastillo/IAV23-DelCastilloRubio/blob/main/ReadmeImages/EldenRing_01.jpg" /></td>
+
 
 ## AUTOR
 - [Ignacio del Castillo](https://github.com/NachoDelCastillo)
