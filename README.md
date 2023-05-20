@@ -15,7 +15,7 @@ El objetivo de esta practica final consiste en crear una inteligencia artificial
   </tr>
     <tr>
     <th>(Elden Ring)</th>
-    <th>(The Legend Of Zelda : Breath Of The Wild)L</th>
+    <th>(The Legend Of Zelda : Breath Of The Wild)</th>
   </tr>
 </table>
 
