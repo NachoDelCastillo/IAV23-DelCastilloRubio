@@ -8,7 +8,7 @@
 El objetivo de esta practica final consiste en crear una inteligencia artificial que sea capaz de controlar a un "Jefe Final" de un videojuego del género **Souls-Like**.
 
 
-<td><img src="https://github.com/IAV23-DelCastilloRubio/blob/main/ReadmeImages/image.png" /></td>
+<td><img src="https://github.com/IAV23-DelCastilloRubio/blob/main/ReadmeImages/EldenRing_01.jpg" /></td>
 
 
 **PRUEBA**
