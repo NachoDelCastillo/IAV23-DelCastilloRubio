@@ -10,10 +10,6 @@ El objetivo de esta practica final consiste en crear una inteligencia artificial
 
 <table>
   <tr>
-    <th>BOCETO INICIAL</th>
-    <th>RESULTADO FINAL</th>
-  </tr>
-  <tr>
     <td><img src="https://github.com/NachoDelCastillo/IAV23-DelCastilloRubio/blob/main/ReadmeImages/EldenRing_01.jpg" /></td>
     <td><img src="https://github.com/NachoDelCastillo/IAV23-DelCastilloRubio/blob/main/ReadmeImages/EldenRing_01.jpg" /></td>
   </tr>
