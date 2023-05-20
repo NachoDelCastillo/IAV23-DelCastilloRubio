@@ -10,6 +10,7 @@ El estado actual del juego (viernes 19 de mayo de 2023) constiste en:
 
 <td><img src="https://github.com/NachoDelCastillo/IAV23-DelCastilloRubio/blob/main/ReadmeImages/EstadoProyecto.gif" /></td>
 
+
 ## AUTOR
 - [Ignacio del Castillo](https://github.com/NachoDelCastillo)
 
