@@ -8,6 +8,7 @@ El estado actual del juego (viernes 19 de mayo de 2023) constiste en:
 - La infraestructura y la interfaz que muestra la salud actual del jugador.
 - Un enemigo con un funcionamiento basico de momento, en el que puede perseguir al jugador y atacarlo. Tambien puede recibir daño.
 
+Aqui hay un breve video mostrando las funcionalidades basicas que hay por el momento (tarda un poco en cargarse)
 <td><img src="https://github.com/NachoDelCastillo/IAV23-DelCastilloRubio/blob/main/ReadmeImages/EstadoProyecto.gif" /></td>
 
 
@@ -28,7 +29,18 @@ El objetivo de esta practica final consiste en crear una inteligencia artificial
     <th>(Elden Ring)</th>
     <th>(The Legend Of Zelda : Breath Of The Wild)</th>
   </tr>
+  </br>
+    <tr>
+    <td><img src="https://github.com/NachoDelCastillo/IAV23-DelCastilloRubio/blob/main/ReadmeImages/Bloodborne_01.jpg" /></td>
+    <td><img src="https://github.com/NachoDelCastillo/IAV23-DelCastilloRubio/blob/main/ReadmeImages/Bloodborne_01.jpg" /></td>
+  </tr>
+    <tr>
+    <th>(Elden Ring)</th>
+    <th>(The Legend Of Zelda : Breath Of The Wild)</th>
+  </tr>
 </table>
+
+
 
 </br>
 El genero **Souls-like** es un subgénero de los videojuegos de rol de acción que se compone de juegos que toma mecánicas y elementos de la saga souls y lo adaptan a sí mismos.
