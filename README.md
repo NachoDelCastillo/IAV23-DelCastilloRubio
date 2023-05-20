@@ -19,7 +19,7 @@ Aqui hay un breve video mostrando las funcionalidades basicas que hay por el mom
 
 El objetivo de esta practica final consiste en crear una inteligencia artificial que sea capaz de controlar a un "Jefe Final" de un videojuego del género **Souls-like**.
 
-- [Ejemplo(obviamente no tan laborioso)] (https://www.youtube.com/watch?v=jQhfP79H09g&ab_channel=Shirrako)
+- [Ejemplo(obviamente no tan laborioso)](https://www.youtube.com/watch?v=jQhfP79H09g&ab_channel=Shirrako)
 
 </br>
 <table>
