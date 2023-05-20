@@ -47,8 +47,8 @@ Pero como el ataque cuerpo a cuerpo es la unica opcion para el jugador, estara o
 ## ACCIONES
 - PRUEBA : Prueba.
 
-| **Accion** | **Descripcion** |
-|:-:|:--|
+| **ACCION** | **DESCRIPCION** |
+|:-:|:-:|
 | Roll/Esquiva | Hace una voltereta, durante la misma, es invulnerable a cualquier ataque |
 | Sprint | Mientras se mantenga el boton presionado el jugador aumenta su velocidad |
 | LockOn | Inabilita el control manual de la camara, la cual se centra en el enemigo hasta que se desactive. En este estado el jugador cambiara sus animaciones de movimiento para no dar la espalda al enemigo |
