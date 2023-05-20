@@ -8,6 +8,7 @@ El estado actual del juego (viernes 19 de mayo de 2023) constiste en:
 - La infraestructura y la interfaz que muestra la salud actual del jugador.
 - Un enemigo con un funcionamiento basico de momento, en el que puede perseguir al jugador y atacarlo. Tambien puede recibir daño.
 
+Aqui hay un breve video mostrando las funcionalidades basicas que hay por el momento (tarda un poco en cargarse)
 <td><img src="https://github.com/NachoDelCastillo/IAV23-DelCastilloRubio/blob/main/ReadmeImages/EstadoProyecto.gif" /></td>
 
 
