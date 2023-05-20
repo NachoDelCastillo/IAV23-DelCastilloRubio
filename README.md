@@ -31,12 +31,12 @@ El objetivo de esta practica final consiste en crear una inteligencia artificial
   </tr>
   </br>
     <tr>
-    <td><img src="https://github.com/NachoDelCastillo/IAV23-DelCastilloRubio/blob/main/ReadmeImages/Bloodborne_01.jpg" /></td>
+    <td><img src="https://github.com/NachoDelCastillo/IAV23-DelCastilloRubio/blob/main/ReadmeImages/DarkSouls3_01.jpg" /></td>
     <td><img src="https://github.com/NachoDelCastillo/IAV23-DelCastilloRubio/blob/main/ReadmeImages/Bloodborne_01.jpg" /></td>
   </tr>
     <tr>
-    <th>(Elden Ring)</th>
-    <th>(The Legend Of Zelda : Breath Of The Wild)</th>
+    <th>(Dark Souls 3)</th>
+    <th>(Bloodborne)</th>
   </tr>
 </table>
 
