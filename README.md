@@ -43,10 +43,20 @@ Pero como el ataque cuerpo a cuerpo es la unica opcion para el jugador, estara o
 
 ## INFRAESTRUCTURA
 
+Para el correcto funcionamiento del gameplay en este juego, han sido necesarios muchos scripts extra que no tienen nada que ver con la Inteligencia Artificial del Enemigo.
+Los unicos scripts relevantes oara la inteligencia artificial del enemigo son los siguientes (Assets/Scripts/A.I):
+
+- EnemyManager : Es el script principal del enemigo, en el se organiza el resto de funcionalidades repartidas en el resto de scripts. Tambien se ocupa de calcular el area de proximidad en el que se encuentra el jugador y dependiendo de la misma elegir nuevas acciones durante todo el combate.
+- EnemyAction / EnemyAttackAction : ScriptableObjects que definen las posibles acciones del Jefe, almacenando informacion (dependiendo del tipo de accion) como el angulo necesario entre el frente del enemigo y el jugador para poder realizar la accion, el area de proximidad a la que pertenece esta accion, la probabilidad de que esta accion se eliga sobre las demas o el tiempo de recuperacion (tiempo que el enemigo debe esperar antes de realizar otro ataque).
+- EnemyLocomotion : Se encarga de manejar el movimiento y rotacion del enemigo en todo momento manipulando el rigidbody, tambien activando y desactivando el NavMeshAgent cuando sea necesario, y calculando rotaciones con "Slerp" para un movimiento fluido
+- EnemyAnimator : Encapsula todo lo que tiene que ver con el manejo de las animaciones del enemigo.
+- EnemyStats : Almacena informacion acerca de la vida restante del enemigo y funciones relacionadas con la misma, como recibir daño del jugador. Tambien actualiza la interfaz para mostrarselo en todo momento al jugador por pantalla.
 
 ## ACCIONES
-- PRUEBA : Prueba.
 
+**JEFE**
+
+**JUGADOR**
 | **ACCION** | **TECLADO** | **MANDO** | **DESCRIPCION** |
 |:-:|:-:|:-:|:-:|
 | Roll/Esquiva | Left Shift | Left Shoulder | Realiza una voltereta, durante la misma, es invulnerable a cualquier ataque |
@@ -54,8 +64,6 @@ Pero como el ataque cuerpo a cuerpo es la unica opcion para el jugador, estara o
 | LockOn | F | Right Joystick Press| Inabilita el control manual de la camara, la cual se centra en el enemigo hasta que se desactive. En este estado el jugador cambiara sus animaciones de movimiento para no dar la espalda al enemigo |
 | Ataque ligero | Click Izquierdo | Right Shoulder (R1) | Realiza una animacion de atacar con la espada rapida realizando poco daño |
 | Ataque pesado | Click Derecho | Right Trigger (R2) | Realiza una animacion de atacar con la espada lenta realizando mucho daño |
-
-
 
 **PRUEBA**
 - PRUEBA : Prueba.
