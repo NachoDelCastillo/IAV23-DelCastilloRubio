@@ -47,7 +47,7 @@ Pero como el ataque cuerpo a cuerpo es la unica opcion para el jugador, estara o
 ## ACCIONES
 - PRUEBA : Prueba.
 
-| **Accion** | 
+| **Accion** | **Descripcion** |
 |:-:|:--|
 | Roll/Esquiva | Hace una voltereta, durante la misma, es invulnerable a cualquier ataque |
 | Sprint | Mientras se mantenga el boton presionado el jugador aumenta su velocidad |
