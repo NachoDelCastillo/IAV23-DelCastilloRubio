@@ -20,6 +20,9 @@ El objetivo de esta practica final consiste en crear una inteligencia artificial
 </table>
 
 
+<td><img src="https://github.com/NachoDelCastillo/IAV23-DelCastilloRubio/blob/main/ReadmeImages/TrabajoFinal_01.jpg" /></td>
+
+
 **PRUEBA**
 - PRUEBA : Prueba.
 
