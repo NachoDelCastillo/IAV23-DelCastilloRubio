@@ -2,10 +2,13 @@
 
 ## IMPORTANTE
 En esta practica se empleara hasta el ultimo dia permitido para terminar y pulir la practica.
-El estado actual del juego constiste en:
+
+El estado actual del juego (viernes 19 de mayo de 2023) constiste en:
 - El personaje que controla el jugador completamente terminado, con todas las acciones mencionadas mas abajo.
 - La infraestructura y la interfaz que muestra la salud actual del jugador.
 - Un enemigo con un funcionamiento basico de momento, en el que puede perseguir al jugador y atacarlo. Tambien puede recibir daño.
+
+<td><img src="https://github.com/NachoDelCastillo/IAV23-DelCastilloRubio/blob/main/ReadmeImages/EstadoProyecto.gif" /></td>
 
 ## AUTOR
 - [Ignacio del Castillo](https://github.com/NachoDelCastillo)
