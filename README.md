@@ -29,7 +29,18 @@ El objetivo de esta practica final consiste en crear una inteligencia artificial
     <th>(Elden Ring)</th>
     <th>(The Legend Of Zelda : Breath Of The Wild)</th>
   </tr>
+  </br>
+    <tr>
+    <td><img src="https://github.com/NachoDelCastillo/IAV23-DelCastilloRubio/blob/main/ReadmeImages/Bloodborne_01.jpg" /></td>
+    <td><img src="https://github.com/NachoDelCastillo/IAV23-DelCastilloRubio/blob/main/ReadmeImages/Bloodborne_01.jpg" /></td>
+  </tr>
+    <tr>
+    <th>(Elden Ring)</th>
+    <th>(The Legend Of Zelda : Breath Of The Wild)</th>
+  </tr>
 </table>
+
+
 
 </br>
 El genero **Souls-like** es un subgénero de los videojuegos de rol de acción que se compone de juegos que toma mecánicas y elementos de la saga souls y lo adaptan a sí mismos.
