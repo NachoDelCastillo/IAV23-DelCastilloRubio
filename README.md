@@ -29,7 +29,7 @@ Si el comportamiento de estos enemigos no es creado correctamente, la batalla po
 
 En esta practica mi objetivo es crear una batalla entre el jugador y un Jefe. Programando la inteligencia artificial que controla a dicho enemigo de forma que sea predecible, que presente un desafio y mantenga la pelea interesante evitando el tipico patron de "Acercarse al jugador" y "Atacar".
 
-
+</br></br>
 ## DISEÑO
 Para conseguir un comporamiento variado e interesante, hago uso de diferentes niveles de proximidad alrededor del Jefe, el cual tiene en cuenta a que distancia se encuentra del jugador, determinando el area de proximidad en el que se encuentra el jugador respecto al Jefe.
 En cada una de estas areas de proximidad, el Jefe podra elegir su siguiente accion entre un grupo de acciones designadas a esta area de proximidad, cada accion determinada por una probabilidad (facilmente asignable desde el editor).
@@ -40,7 +40,7 @@ Pero como el ataque cuerpo a cuerpo es la unica opcion para el jugador, estara o
 
 <td><img src="https://github.com/NachoDelCastillo/IAV23-DelCastilloRubio/blob/main/ReadmeImages/TrabajoFinal_01.jpg" /></td>
 
-
+</br></br>
 ## INFRAESTRUCTURA
 
 Para el correcto funcionamiento del gameplay en este juego, han sido necesarios muchos scripts extra que no tienen nada que ver con la Inteligencia Artificial del Enemigo.
@@ -56,6 +56,7 @@ Los unicos scripts relevantes oara la inteligencia artificial del enemigo son lo
 
 - ****EnemyStats :**** </br>Almacena informacion acerca de la vida restante del enemigo y funciones relacionadas con la misma, como recibir daño del jugador. Tambien actualiza la interfaz para mostrarselo en todo momento al jugador por pantalla.
 
+</br></br>
 ## ACCIONES
 
 **JEFE**
