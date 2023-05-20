@@ -47,13 +47,13 @@ Pero como el ataque cuerpo a cuerpo es la unica opcion para el jugador, estara o
 ## ACCIONES
 - PRUEBA : Prueba.
 
-| **ACCION** | **DESCRIPCION** |
-|:-:|:-:|
-| Roll/Esquiva | Hace una voltereta, durante la misma, es invulnerable a cualquier ataque |
-| Sprint | Mientras se mantenga el boton presionado el jugador aumenta su velocidad |
-| LockOn | Inabilita el control manual de la camara, la cual se centra en el enemigo hasta que se desactive. En este estado el jugador cambiara sus animaciones de movimiento para no dar la espalda al enemigo |
-| Ataque ligero | Realiza una animacion de atacar con la espada rapida realizando poco daño |
-| Ataque pesado | Realiza una animacion de atacar con la espada lenta realizando mucho daño |
+| **ACCION** | **TECLADO** | **MANDO** | **DESCRIPCION** |
+|:-:|:-:|:-:|:-:|
+| Roll/Esquiva | Left Shift | Left Shoulder | Realiza una voltereta, durante la misma, es invulnerable a cualquier ataque |
+| Sprint | Left Control | Right Joystick Press | Mientras se mantenga el boton presionado el jugador aumenta su velocidad |
+| LockOn | F | Right Joystick Press| Inabilita el control manual de la camara, la cual se centra en el enemigo hasta que se desactive. En este estado el jugador cambiara sus animaciones de movimiento para no dar la espalda al enemigo |
+| Ataque ligero | Click Izquierdo | Right Shoulder (R1) | Realiza una animacion de atacar con la espada rapida realizando poco daño |
+| Ataque pesado | Click Derecho | Right Trigger (R2) | Realiza una animacion de atacar con la espada lenta realizando mucho daño |
 
 
 
