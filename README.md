@@ -97,7 +97,8 @@ Los unicos scripts relevantes oara la inteligencia artificial del enemigo son lo
 | Ataque ligero | Click Izquierdo | Right Shoulder (R1) | Realiza una animacion de atacar con la espada rapida realizando poco daño |
 | Ataque pesado | Click Derecho | Right Trigger (R2) | Realiza una animacion de atacar con la espada lenta realizando mucho daño |
 
-**PRUEBA**
+<!--
+ **PRUEBA**
 - PRUEBA : Prueba.
 
 | A  |  B  |  C  |  
@@ -105,3 +106,4 @@ Los unicos scripts relevantes oara la inteligencia artificial del enemigo son lo
 | ✔ | prueba: | 123 |
 | ✔ | prueba: | 123 |
 | ✔ | prueba: | 123 |
+-->
