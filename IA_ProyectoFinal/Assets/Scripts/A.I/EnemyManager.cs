@@ -42,6 +42,7 @@ namespace NX
         {
             HandleRecoveryTimer();
             isInteracting = enemyAnimatorHandler.anim.GetBool("isInteracting");
+            isRotatingWithRootMotion = enemyAnimatorHandler.anim.GetBool("isRotatingWithRootMotion");
         }
 
         private void FixedUpdate()

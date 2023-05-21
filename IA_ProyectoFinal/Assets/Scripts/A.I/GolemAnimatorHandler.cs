@@ -13,7 +13,6 @@ namespace NX
         [SerializeField]
         DamageCollider floorSlam;
 
-
         [SerializeField]
         GameObject explosion;
 

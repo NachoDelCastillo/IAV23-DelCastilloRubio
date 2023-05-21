@@ -9,6 +9,7 @@ namespace NX
     {
         public Transform lockOnTransform;
 
-
+        [Header("MovementFlags")]
+        public bool isRotatingWithRootMotion;
     }
 }
