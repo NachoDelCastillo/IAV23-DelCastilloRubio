@@ -23,7 +23,7 @@ public class PlayerStats : CharacterStats
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(1))
         {
             TakeDamage(1);
         }
@@ -31,6 +31,9 @@ public class PlayerStats : CharacterStats
 
     public void TakeDamage(int damage)
     {
+        if (isDead)
+            return;
+
         currentHealth -= damage;
 
         healthBar.SetCurrentHealth(currentHealth);
@@ -39,6 +42,7 @@ public class PlayerStats : CharacterStats
         {
             currentHealth = 0;
             animatorHandler.PlayTargetAnimation("Death", true);
+            isDead = true;
         }
         else
         {

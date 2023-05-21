@@ -6,23 +6,22 @@ namespace NX
 {
     public class EnemyAnimatorHandler : AnimatorManager
     {
-
-        EnemyLocomotion enemyLocomotion;
+        EnemyManager enemyManager;
 
         private void Awake()
         {
             anim = GetComponent<Animator>();
-            enemyLocomotion= GetComponentInParent<EnemyLocomotion>();
+            enemyManager = GetComponentInParent<EnemyManager>();
         }
 
         private void OnAnimatorMove()
         {
             float delta = Time.deltaTime;
-            enemyLocomotion.enemyRigidbody.drag = 0;
+            enemyManager.enemyRigidbody.drag = 0;
             Vector3 deltaPosition = anim.deltaPosition;
             deltaPosition.y = 0;
             Vector3 velocity = deltaPosition / delta;
-            enemyLocomotion.enemyRigidbody.velocity = velocity;
+            enemyManager.enemyRigidbody.velocity = velocity;
         }
     }
 }

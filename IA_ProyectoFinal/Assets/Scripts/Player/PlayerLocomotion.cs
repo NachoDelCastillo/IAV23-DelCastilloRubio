@@ -29,6 +29,9 @@ namespace NX
         [SerializeField]
         float rotationSpeed = 10;
 
+        public CapsuleCollider characterCollider;
+        public CapsuleCollider characterCollisionBlockerCollider;
+
         private void Awake()
         {
             cameraHandler = FindObjectOfType<CameraHandler>();
@@ -43,6 +46,8 @@ namespace NX
             cameraObject = Camera.main.transform;
             myTransform = transform;
             animatorHandler.Initialize();
+
+            Physics.IgnoreCollision(characterCollider, characterCollisionBlockerCollider, true);
         }
 
         #region Movement

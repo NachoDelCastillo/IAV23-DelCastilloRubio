@@ -20,6 +20,9 @@ namespace NX
 
         public void TakeDamage(int damage)
         {
+            if (isDead)
+                return;
+
             currentHealth -= damage;
 
             anim.Play("Damage");
@@ -28,6 +31,7 @@ namespace NX
             {
                 currentHealth = 0;
                 anim.Play("Death");
+                isDead = true;
             }
         }
     }

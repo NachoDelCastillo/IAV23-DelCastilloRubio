@@ -8,5 +8,7 @@ namespace NX
     {
         public int maxHealth;
         public int currentHealth;
+
+        public bool isDead;
     }
 }
