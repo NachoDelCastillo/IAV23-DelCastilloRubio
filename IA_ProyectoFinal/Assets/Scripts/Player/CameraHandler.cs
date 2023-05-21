@@ -88,14 +88,16 @@ namespace NX
                 {
                     float velocity = 0;
 
-                    Vector3 dir = currentLockOnTarget.transform.position - transform.position;
+                    Vector3 trueLockOnTargetPosition = currentLockOnTarget.transform.position + new Vector3(0, 4, 0);
+
+                    Vector3 dir = trueLockOnTargetPosition - transform.position;
                     dir.Normalize();
                     dir.y = 0;
 
                     Quaternion targetRotation = Quaternion.LookRotation(dir);
                     transform.rotation = targetRotation;
 
-                    dir = currentLockOnTarget.transform.position - cameraPivotTransform.position;
+                    dir = trueLockOnTargetPosition - cameraPivotTransform.position;
                     dir.Normalize();
 
                     targetRotation = Quaternion.LookRotation(dir);

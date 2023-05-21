@@ -46,7 +46,6 @@ namespace NX
 
             if (cameraHandler != null)
             {
-
                 cameraHandler.FollowTarget(delta);
                 cameraHandler.HandleCameraRotation(delta, inputHandler.mouseX, inputHandler.mouseY);
             }
