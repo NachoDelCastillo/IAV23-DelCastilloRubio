@@ -25,7 +25,7 @@ namespace NX
 
             currentHealth -= damage;
 
-            anim.Play("Damage");
+            //anim.Play("Damage");
 
             if (currentHealth <= 0)
             {

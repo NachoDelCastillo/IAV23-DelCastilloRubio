@@ -8,10 +8,14 @@ namespace NX
     {
         EnemyManager enemyManager;
 
+        DamageCollider damageCollider;
+
         private void Awake()
         {
             anim = GetComponent<Animator>();
             enemyManager = GetComponentInParent<EnemyManager>();
+
+            damageCollider = transform.parent.GetComponentInChildren<DamageCollider>();
         }
 
         private void OnAnimatorMove()
@@ -22,6 +26,17 @@ namespace NX
             deltaPosition.y = 0;
             Vector3 velocity = deltaPosition / delta;
             enemyManager.enemyRigidbody.velocity = velocity;
+        }
+
+
+        public void EnableDamageCollider()
+        {
+            damageCollider.EnableDamageCollider();
+        }
+
+        public void DisableDamageCollider()
+        {
+            damageCollider.DisableDamageCollider();
         }
     }
 }

@@ -112,5 +112,16 @@ namespace NX
         {
             damageCollider.DisableDamageCollider();
         }
+
+
+        public void EnableIsInvurenable()
+        {
+            anim.SetBool("isInvulnerable", true);
+        }
+
+        public void DisableIsInvurenable()
+        {
+            anim.SetBool("isInvulnerable", false);
+        }
     }
 }

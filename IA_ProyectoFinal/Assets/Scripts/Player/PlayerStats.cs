@@ -5,13 +5,16 @@ using UnityEngine;
 
 public class PlayerStats : CharacterStats
 {
+    PlayerManager playerManager;
+    AnimatorHandler animatorHandler;
+
     [SerializeField]
     HealthBar healthBar;
 
-    AnimatorHandler animatorHandler;
 
     private void Awake()
     {
+        playerManager = GetComponent<PlayerManager>();
         animatorHandler = GetComponentInChildren<AnimatorHandler>();
     }
 
@@ -31,6 +34,9 @@ public class PlayerStats : CharacterStats
 
     public void TakeDamage(int damage)
     {
+        if (playerManager.isInvulnerable)
+            return;
+
         if (isDead)
             return;
 

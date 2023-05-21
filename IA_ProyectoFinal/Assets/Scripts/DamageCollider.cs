@@ -13,7 +13,7 @@ namespace NX
 
         private void Awake()
         {
-            damageCollider = GetComponent<BoxCollider>();
+            damageCollider = GetComponent<Collider>();
             damageCollider.gameObject.SetActive(true);
             damageCollider.isTrigger = true;
             damageCollider.enabled = false;
@@ -31,6 +31,8 @@ namespace NX
 
         private void OnTriggerEnter(Collider other)
         {
+            Debug.Log("OnTriggerEnter");
+
             if (other.tag == "Player")
             {
                 PlayerStats playerStats = other.GetComponent<PlayerStats>();

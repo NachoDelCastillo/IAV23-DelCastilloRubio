@@ -16,6 +16,7 @@ namespace NX
 
         [Header("Player Flags")]
         public bool isSprinting;
+        public bool isInvulnerable;
 
         private void Awake()
         {
@@ -32,6 +33,7 @@ namespace NX
         private void Update()
         {
             isInteracting = anim.GetBool("isInteracting");
+            isInvulnerable = anim.GetBool("isInvulnerable");
 
             float delta = Time.deltaTime;
             inputHandler.TickInput(delta);
