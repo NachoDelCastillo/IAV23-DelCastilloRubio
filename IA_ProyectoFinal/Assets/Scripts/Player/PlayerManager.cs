@@ -8,6 +8,7 @@ namespace NX
     public class PlayerManager : CharacterManager
     {
         InputHandler inputHandler;
+        AnimatorHandler animatorHandler;
         Animator anim;
         CameraHandler cameraHandler;
         PlayerLocomotion playerLocomotion;
@@ -21,19 +22,32 @@ namespace NX
         private void Awake()
         {
             cameraHandler = FindObjectOfType<CameraHandler>();
-        }
-
-        private void Start()
-        {
+            animatorHandler = GetComponentInChildren<AnimatorHandler>();
             inputHandler = GetComponent<InputHandler>();
             anim = GetComponentInChildren<Animator>();
             playerLocomotion = GetComponent<PlayerLocomotion>();
-        } 
+        }
 
         private void Update()
         {
             isInteracting = anim.GetBool("isInteracting");
             isInvulnerable = anim.GetBool("isInvulnerable");
+
+            // Si no esta realizando ninguna accion
+            if (!isInteracting)
+            {
+                // Activar el trail solo cuando este esprintando
+                if (isSprinting)
+                {
+                    animatorHandler.EnableTrailOnFoot();
+                    animatorHandler.EnableTrailOnSword();
+                }
+                else
+                {
+                    animatorHandler.DisableTrailOnFoot();
+                    animatorHandler.DisableTrailOnSword();
+                }
+            }
 
             float delta = Time.deltaTime;
             inputHandler.TickInput(delta);

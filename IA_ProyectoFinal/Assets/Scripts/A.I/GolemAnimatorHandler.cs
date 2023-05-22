@@ -35,5 +35,52 @@ namespace NX
 
             Destroy(newExplosion, 0.5f);
         }
+
+
+
+
+        #region VFX
+
+        [SerializeField]
+        TrailRenderer[] punchTr;
+
+        [SerializeField]
+        TrailRenderer[] footsTr;
+
+        private void Start()
+        {
+            foreach (TrailRenderer trail in punchTr)
+                trail.emitting = false;
+
+            foreach (TrailRenderer trail in footsTr)
+                trail.emitting = false;
+        }
+
+        public void EnableTrailOnPunch()
+        {
+            foreach (TrailRenderer trail in punchTr)
+                trail.emitting = true;
+        }
+
+        public void DisableTrailOnPunch()
+        {
+            foreach (TrailRenderer trail in punchTr)
+                trail.emitting = false;
+        }
+
+
+        public void EnableTrailOnFoot()
+        {
+            foreach (TrailRenderer trail in footsTr)
+                trail.emitting = true;
+        }
+
+        public void DisableTrailOnFoot()
+        {
+            foreach (TrailRenderer trail in footsTr)
+                trail.emitting = false;
+        }
+
+        #endregion
     }
 }

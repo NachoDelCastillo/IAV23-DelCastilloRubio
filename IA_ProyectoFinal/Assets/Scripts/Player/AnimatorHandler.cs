@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.Rendering.UI;
 
 namespace NX
@@ -15,6 +16,23 @@ namespace NX
         public bool canRotate;
 
         DamageCollider damageCollider;
+
+        [SerializeField]
+        TrailRenderer[] swordTr;
+
+        [SerializeField]
+        TrailRenderer[] footsTr;
+
+        private void Awake()
+        {
+            foreach (TrailRenderer trail in swordTr)
+                trail.emitting = false;
+
+            foreach (TrailRenderer trail in footsTr)
+                trail.emitting = false;
+
+            initialSize = swordTr[0].startWidth;
+        }
 
         public void Initialize()
         {
@@ -71,7 +89,8 @@ namespace NX
             {
                 v = 2;
                 h = horizontalMovement;
-;           }
+                ;
+            }
 
             anim.SetFloat(vertical, v, 0.1f, Time.deltaTime);
             anim.SetFloat(horizontal, h, 0.1f, Time.deltaTime);
@@ -113,7 +132,6 @@ namespace NX
             damageCollider.DisableDamageCollider();
         }
 
-
         public void EnableIsInvurenable()
         {
             anim.SetBool("isInvulnerable", true);
@@ -123,5 +141,42 @@ namespace NX
         {
             anim.SetBool("isInvulnerable", false);
         }
+
+
+        #region VFX
+
+        float initialSize;
+        public void EnableTrailOnSword(float size = 0)
+        {
+            foreach (TrailRenderer trail in swordTr)
+            {
+                trail.emitting = true;
+                if (size > 0)
+                    trail.startWidth = size;
+                else
+                    trail.startWidth = initialSize;
+            }
+        }
+
+        public void DisableTrailOnSword()
+        {
+            foreach (TrailRenderer trail in swordTr)
+                trail.emitting = false;
+        }
+
+
+        public void EnableTrailOnFoot()
+        {
+            foreach (TrailRenderer trail in footsTr)
+                trail.emitting = true;
+        }
+
+        public void DisableTrailOnFoot()
+        {
+            foreach (TrailRenderer trail in footsTr)
+                trail.emitting = false;
+        }
+
+        #endregion
     }
 }

@@ -44,9 +44,6 @@ namespace NX
 
             velocityLerper = Mathf.Lerp(velocityLerper, velocityValueOverOne, Time.deltaTime * 2);
 
-            Debug.Log("velocityValueOverOne = " + velocityValueOverOne);
-            Debug.Log("velocityLerper = " + velocityLerper);
-
            // transform.forward = Vector3.Lerp(transform.forward, direction, velocityLerper);
 
             transform.up = Vector3.Lerp(Vector3.up, direction, velocityLerper + .1f);

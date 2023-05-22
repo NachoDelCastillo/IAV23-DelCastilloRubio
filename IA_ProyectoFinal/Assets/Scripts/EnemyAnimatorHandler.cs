@@ -41,5 +41,16 @@ namespace NX
         {
             damageCollider.DisableDamageCollider();
         }
+
+
+        public void EnableCanRotate()
+        {
+            enemyManager.canRotate = true;
+        }
+
+        public void DisableCanRotate()
+        {
+            enemyManager.canRotate = false;
+        }
     }
 }

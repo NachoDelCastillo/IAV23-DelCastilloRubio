@@ -30,9 +30,17 @@ namespace NX
                 return rotateTowardsTargetState;
 
 
-                if (enemyManager.isPerformingAction)
+            if (enemyManager.isPerformingAction)
             {
                 enemyAnimatorHandler.anim.SetFloat("Vertical", 0, 0.1f, Time.deltaTime);
+
+                // Si se esta en medio de un ataque y se permite rotar en el ataque
+                if (enemyManager.canRotate)
+                {
+                    Debug.Log("CANROTATE");
+                    combatStanceState.HandleRotateTowardsTarget(enemyManager);
+                }
+
                 return this;
             }
 
