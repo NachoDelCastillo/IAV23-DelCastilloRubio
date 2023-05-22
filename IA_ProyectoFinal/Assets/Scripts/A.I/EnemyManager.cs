@@ -44,10 +44,6 @@ namespace NX
             isInteracting = enemyAnimatorHandler.anim.GetBool("isInteracting");
             isRotatingWithRootMotion = enemyAnimatorHandler.anim.GetBool("isRotatingWithRootMotion");
             canRotate = enemyAnimatorHandler.anim.GetBool("canRotate");
-
-
-            float distanceFromTarget = Vector3.Distance(currentTarget.transform.position, transform.position);
-            Debug.Log("distanceFromTarget = " + distanceFromTarget);
         }
 
         private void FixedUpdate()

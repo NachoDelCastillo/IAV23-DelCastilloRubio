@@ -19,9 +19,14 @@ namespace NX
         // Velocidad a la que rota mientras ataca
         float attackingRotationSpeed = 3;
 
+        // Caminar de una de las formas designadas en el modo combate
         bool randomDestinationSet = false;
         float verticalMovementValue = 0;
         float horizontalMovementValue = 0;
+
+        float randomMovementTimer = 0;
+        float maxMovementTime = 6;
+        float minMovementTime = 3;
 
         public override State Tick(EnemyManager enemyManager, EnemyStats enemyStats, EnemyAnimatorHandler enemyAnimatorHandler)
         {
@@ -49,8 +54,23 @@ namespace NX
             if (!randomDestinationSet)
             {
                 randomDestinationSet = true;
-                DecideCirclingAction(enemyAnimatorHandler);
                 // Decicir el destino aleatoriamente
+                DecideCirclingAction(enemyAnimatorHandler);
+
+                // Decidir dentro de cuanto tiempo se cambiara este estilo de andar
+                randomMovementTimer = Random.Range(minMovementTime, maxMovementTime);
+            }
+            else
+            {
+                // Si se tiene una destination asignada cambiarla dentro de X segundos
+                randomMovementTimer -= Time.deltaTime;
+
+                if (randomMovementTimer <= 0)
+                {
+                    randomMovementTimer = 0;
+                    // Desvincular el movimiento anterior para que se decida uno nuevo
+                    randomDestinationSet = false;
+                }
             }
 
 
@@ -90,29 +110,75 @@ namespace NX
             Quaternion targetRotation = Quaternion.LookRotation(direction);
             //enemyManager.transform.rotation = Quaternion.Slerp(enemyManager.transform.rotation, targetRotation, (enemyManager.rotationSpeed * .005f) / Time.deltaTime);
             enemyManager.transform.rotation = Quaternion.Slerp
-                (enemyManager.transform.rotation, targetRotation, 5 * Time.deltaTime);
+                (enemyManager.transform.rotation, targetRotation, 3 * Time.deltaTime);
         }
 
+
+        struct CombatWalkingType
+        {
+            public float verticalMovementValue;
+            public float horizontalMovementValue;
+
+            public CombatWalkingType(float _verticalMovementValue, float _horizontalMovementValue)
+            {
+                verticalMovementValue = _verticalMovementValue;
+                horizontalMovementValue = _horizontalMovementValue;
+            }
+        }
+
+        CombatWalkingType[] combatWalkingTypes;
+        int currentWalkTypeIndex = 0;
+
+        private void Awake()
+        {
+            combatWalkingTypes = new CombatWalkingType[3];
+
+            combatWalkingTypes[0] = new CombatWalkingType(0, 1);
+            combatWalkingTypes[1] = new CombatWalkingType(0, -.5f);
+            combatWalkingTypes[2] = new CombatWalkingType(.6f, 0);
+        }
 
         private void DecideCirclingAction(EnemyAnimatorHandler enemyAnimatorHandler)
         {
-            WalkAroundTarget(enemyAnimatorHandler);
+            // No elegir el mismo tipo de andar dos veces seguidas
+            int randomNewWalkType = currentWalkTypeIndex;
+            while (randomNewWalkType == currentWalkTypeIndex)
+                randomNewWalkType = Random.Range(0, combatWalkingTypes.Length);
+            currentWalkTypeIndex = randomNewWalkType;
+
+            // Settear los valores que determinan el movimiento en el enemigo
+            CombatWalkingType randomWalkType = combatWalkingTypes[currentWalkTypeIndex];
+            verticalMovementValue = randomWalkType.verticalMovementValue;
+            horizontalMovementValue = randomWalkType.horizontalMovementValue;
         }
 
-        private void WalkAroundTarget(EnemyAnimatorHandler enemyAnimatorHandler)
+        //private void WalkAroundTarget(EnemyAnimatorHandler enemyAnimatorHandler)
+        //{
+        //    verticalMovementValue = 0.1f;
+
+        //    horizontalMovementValue = Random.Range(-1, 1f);
+
+        //    if (horizontalMovementValue <= 1 && horizontalMovementValue >= 0)
+        //    {
+        //        horizontalMovementValue = .5f;
+        //    }
+        //    else if (horizontalMovementValue >= -1 && horizontalMovementValue < 0)
+        //    {
+        //        horizontalMovementValue = -.5f;
+        //    }
+        //}
+
+        private void WalkBack(EnemyAnimatorHandler enemyAnimatorHandler)
         {
-            verticalMovementValue = 0.1f;
+            verticalMovementValue = -0.4f;
 
-            horizontalMovementValue = Random.Range(-1, 1f);
+            horizontalMovementValue = 0;
+        }
 
-            if (horizontalMovementValue <= 1 && horizontalMovementValue >= 0)
-            {
-                horizontalMovementValue = .5f;
-            }
-            else if (horizontalMovementValue >= -1 && horizontalMovementValue < 0)
-            {
-                horizontalMovementValue = -.5f;
-            }
+        private void WalkFront(EnemyAnimatorHandler enemyAnimatorHandler)
+        {
+            verticalMovementValue = 0.4f;
+            horizontalMovementValue = 0;
         }
 
         private void GetNewAttack(EnemyManager enemyManager)

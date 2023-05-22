@@ -31,8 +31,6 @@ namespace NX
 
         private void OnTriggerEnter(Collider other)
         {
-            Debug.Log("OnTriggerEnter");
-
             if (other.tag == "Player")
             {
                 PlayerStats playerStats = other.GetComponent<PlayerStats>();

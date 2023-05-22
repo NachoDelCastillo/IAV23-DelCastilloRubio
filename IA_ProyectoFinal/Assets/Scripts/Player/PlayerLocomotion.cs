@@ -165,8 +165,6 @@ namespace NX
 
             if (inputHandler.rollFlag)
             {
-                Debug.Log("rollFlag");
-
                 moveDirection = cameraObject.forward * inputHandler.vertical;
                 moveDirection += cameraObject.right * inputHandler.horizontal;
 
