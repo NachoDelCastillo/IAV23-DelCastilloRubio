@@ -9,6 +9,8 @@ namespace NX
     {
         public CombatStanceState combatStanceState;
 
+        public RotateTowardsTargetState rotateTowardsTargetState;
+
         public override State Tick(EnemyManager enemyManager, EnemyStats enemyStats, EnemyAnimatorHandler enemyAnimatorHandler)
         {
             // Seguir al jugador
@@ -17,30 +19,34 @@ namespace NX
 
             // Si no esta en rango de combate, seguir persiguiendo
 
+            Vector3 targetDirection = enemyManager.currentTarget.transform.position - enemyManager.transform.position;
+            float distanceFromTarget = Vector3.Distance(enemyManager.currentTarget.transform.position, enemyManager.transform.position);
+            float viewableAngle = Vector3.SignedAngle(targetDirection, enemyManager.transform.forward, Vector3.up);
 
-            if (enemyManager.isPerformingAction)
+
+            HandleRotateTowardsTarget(enemyManager);
+
+            if (viewableAngle > 65 || viewableAngle < -65)
+                return rotateTowardsTargetState;
+
+
+                if (enemyManager.isPerformingAction)
             {
                 enemyAnimatorHandler.anim.SetFloat("Vertical", 0, 0.1f, Time.deltaTime);
                 return this;
             }
 
-            Vector3 targetDirection = enemyManager.currentTarget.transform.position - enemyManager.transform.position;
-            float distanceFromTarget = Vector3.Distance(enemyManager.currentTarget.transform.position, enemyManager.transform.position);
-            float viewableAngle = Vector3.Angle(targetDirection, enemyManager.transform.forward);
 
-
-            if (distanceFromTarget > enemyManager.maximumAttackRange)
+            if (distanceFromTarget > enemyManager.maximumAggroRadius)
             {
                 enemyAnimatorHandler.anim.SetFloat("Vertical", 1, 0.1f, Time.deltaTime);
             }
-
-            HandleRotateTowardsTarget(enemyManager);
 
             enemyManager.navMeshAgent.transform.localPosition = Vector3.zero;
             enemyManager.navMeshAgent.transform.localRotation = Quaternion.identity;
 
 
-            if (distanceFromTarget <= enemyManager.maximumAttackRange)
+            if (distanceFromTarget <= enemyManager.maximumAggroRadius)
             {
                 return combatStanceState;
             }

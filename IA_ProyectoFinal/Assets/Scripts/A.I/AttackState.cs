@@ -7,9 +7,13 @@ namespace NX {
     public class AttackState : State
     {
         public CombatStanceState combatStanceState;
-
-        public EnemyAttackAction[] enemyAttacks;
+        public RotateTowardsTargetState rotateTowardsTargetState;
+        public PursueTargetState pursueTargetState;
         public EnemyAttackAction currentAttack;
+
+
+        bool willDoComboNextAttack = false;
+        public bool hasPerformedAttack = false;
 
         public override State Tick(EnemyManager enemyManager, EnemyStats enemyStats, EnemyAnimatorHandler enemyAnimatorHandler)
         {
@@ -22,110 +26,88 @@ namespace NX {
 
             // Volver al estado de combate
 
-            Vector3 targetDirection = enemyManager.currentTarget.transform.position - transform.position;
             float distanceFromTarget = Vector3.Distance(enemyManager.currentTarget.transform.position, enemyManager.transform.position);
-            float viewableAngle = Vector3.Angle(targetDirection, transform.forward);
 
-            if (enemyManager.isPerformingAction)
-                return combatStanceState;
+            RotateTowardsTargetWhileAttacking(enemyManager);
 
-            if (currentAttack != null)
+            if (distanceFromTarget > enemyManager.maximumAggroRadius)
             {
-                // Si estamos muy cerca del jugadorcomo para hacer el ataque actual, calcular un nuevo ataque
-                if (distanceFromTarget < currentAttack.minimumDistanceNeededToAttack)
-                {
-                    return this;
-                }
-                else if (distanceFromTarget < currentAttack.maximumDistanceNeededToAttack)
-                {
-                    // Si el target esta dentro de la distancia
-
-                    if (viewableAngle <= currentAttack.maximunAttackAngle &&
-                        viewableAngle >= currentAttack.minimumAttackAngle)
-                    {
-                        if (enemyManager.currentRecoveryTime <= 0 && !enemyManager.isPerformingAction)
-                        {
-                            enemyAnimatorHandler.anim.SetFloat("Vertical", 0, 0.1f, Time.deltaTime);
-                            enemyAnimatorHandler.anim.SetFloat("Horizontal", 0, 0.1f, Time.deltaTime);
-                            enemyAnimatorHandler.PlayTargetAnimation(currentAttack.actionAnimation, true);
-
-                            enemyManager.isPerformingAction = true;
-                            enemyManager.currentRecoveryTime = currentAttack.recoveryTime;
-                            currentAttack = null;
-                            return combatStanceState;
-                        }
-                    }
-                }
+                return pursueTargetState;
             }
 
-            else
-                GetNewAttack(enemyManager);
+            // Sistema de combos
 
-            return combatStanceState;
+            //if (willDoComboNextAttack && enemyManager.canDoCombo)
+            //{
+            //      AttackTargetWithCombo(enemyAnimatorHandler, enemyManager);
+            //}
 
-            //if (currentAttack == null)
+            if (!hasPerformedAttack)
+            {
+                AttackTarget(enemyAnimatorHandler, enemyManager);
+                //RollForComboChance();
+            }
+
+            //if (willDoComboNextAttack && hasPerformedAttack)
             //{
-            //    GetNewAttack(enemyManager);
+            //    return this;
             //}
-            //else
-            //{
-            //    enemyManager.isPerformingAction = true;
-            //    enemyManager.currentRecoveryTime = currentAttack.recoveryTime;
-            //    enemyAnimatorHandler.PlayTargetAnimation(currentAttack.actionAnimation, true);
-            //    currentAttack = null;
-            //}
-            //return this;
+
+
+            return rotateTowardsTargetState;
         }
 
-
-        private void GetNewAttack(EnemyManager enemyManager)
+        private void AttackTarget(EnemyAnimatorHandler enemyAnimatorHandler, EnemyManager enemyManager)
         {
-            Vector3 targetsDirection = enemyManager.currentTarget.transform.position - transform.position;
-            float viewableAngle = Vector3.Angle(targetsDirection, transform.forward);
-            float distanceFromTarget = Vector3.Distance(enemyManager.currentTarget.transform.position, enemyManager.transform.position);
+            enemyAnimatorHandler.PlayTargetAnimation(currentAttack.actionAnimation, true);
+            enemyManager.currentRecoveryTime = currentAttack.recoveryTime;
+            hasPerformedAttack = true;
+        }
 
-            int maxScore = 0;
+        private void AttackTargetWithCombo(EnemyAnimatorHandler enemyAnimatorHandler, EnemyManager enemyManager)
+        {
+            willDoComboNextAttack = false;
+            enemyAnimatorHandler.PlayTargetAnimation(currentAttack.actionAnimation, true);
+            enemyManager.currentRecoveryTime = currentAttack.recoveryTime;
+            currentAttack = null;
+        }
 
-            for (int i = 0; i < enemyAttacks.Length; i++)
+        private void RollForComboChance(EnemyManager enemyManager)
+        {
+            //float comboChance = Random.Range(0, 100);
+
+            //if (enemyManager.allowAIToPerformCombos && comboChance <= enemyManager.comboLikelyHood)
+            //{
+            //    if (currentAttack.comboAction != null)
+            //    {
+            //        willDoComboNextAttack = true;
+            //        currentAttack = currentAttack.comboAction;
+            //    }
+            //    else
+            //    {
+            //        willDoComboOnNextAttack = false;
+            //        currentAttack = null;
+            //    }
+            //}
+        }
+
+        public void RotateTowardsTargetWhileAttacking(EnemyManager enemyManager)
+        {
+            if (enemyManager.canRotate && enemyManager.isInteracting)
             {
-                EnemyAttackAction enemyAttackAction = enemyAttacks[i];
+                Vector3 direction = enemyManager.currentTarget.transform.position - enemyManager.transform.position;
+                direction.y = 0;
+                direction.Normalize();
 
-                if (distanceFromTarget <= enemyAttackAction.maximumDistanceNeededToAttack
-                    && distanceFromTarget >= enemyAttackAction.minimumDistanceNeededToAttack)
-                {
-                    if (viewableAngle <= enemyAttackAction.maximunAttackAngle
-                        && viewableAngle >= enemyAttackAction.minimumAttackAngle)
-                    {
-                        maxScore += enemyAttackAction.attackScore;
-                    }
-                }
-            }
+                if (direction == Vector3.zero)
+                    direction = enemyManager.transform.forward;
 
-            int randomValue = Random.Range(0, maxScore);
-            int temporaryScore = 0;
-
-            for (int i = 0; i < enemyAttacks.Length; i++)
-            {
-                EnemyAttackAction enemyAttackAction = enemyAttacks[i];
-
-                if (distanceFromTarget <= enemyAttackAction.maximumDistanceNeededToAttack
-                    && distanceFromTarget >= enemyAttackAction.minimumDistanceNeededToAttack)
-                {
-                    if (viewableAngle <= enemyAttackAction.maximunAttackAngle
-                        && viewableAngle >= enemyAttackAction.minimumAttackAngle)
-                    {
-                        if (currentAttack != null)
-                            return;
-
-                        temporaryScore += enemyAttackAction.attackScore;
-
-                        if (temporaryScore > randomValue)
-                        {
-                            currentAttack = enemyAttackAction;
-                        }
-                    }
-                }
+                Quaternion targetRotation = Quaternion.LookRotation(direction);
+                //enemyManager.transform.rotation = Quaternion.Slerp(enemyManager.transform.rotation, targetRotation, (enemyManager.rotationSpeed * .005f) / Time.deltaTime);
+                enemyManager.transform.rotation = Quaternion.Slerp
+                    (enemyManager.transform.rotation, targetRotation, 5 * Time.deltaTime);
             }
         }
+
     }
 }

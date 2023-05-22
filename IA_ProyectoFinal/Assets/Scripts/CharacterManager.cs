@@ -11,5 +11,7 @@ namespace NX
 
         [Header("MovementFlags")]
         public bool isRotatingWithRootMotion;
+
+        public bool canRotate;
     }
 }

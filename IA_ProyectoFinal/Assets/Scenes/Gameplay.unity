@@ -369,6 +369,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackState: {fileID: 1005594364}
   pursueTargetState: {fileID: 233341297}
+  enemyAttacks:
+  - {fileID: 11400000, guid: 83f73c358d93ee346a6024e6f880ca4c, type: 2}
+  - {fileID: 11400000, guid: 68c05c932f0990d4e84961742a29b1c0, type: 2}
 --- !u!1 &110998609
 GameObject:
   m_ObjectHideFlags: 0
@@ -715,6 +718,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   combatStanceState: {fileID: 94382229}
+  rotateTowardsTargetState: {fileID: 1918146427}
 --- !u!4 &259527371 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1852576806548013000, guid: c6e1ce56180a8e74298970225f728de1, type: 3}
@@ -1806,6 +1810,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lockOnTransform: {fileID: 1750083086}
   isRotatingWithRootMotion: 0
+  canRotate: 0
   isInteracting: 0
   isSprinting: 0
   isInvulnerable: 0
@@ -2055,10 +2060,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   combatStanceState: {fileID: 1360783042}
-  enemyAttacks:
-  - {fileID: 11400000, guid: 83f73c358d93ee346a6024e6f880ca4c, type: 2}
-  - {fileID: 11400000, guid: 68c05c932f0990d4e84961742a29b1c0, type: 2}
+  rotateTowardsTargetState: {fileID: 0}
+  pursueTargetState: {fileID: 0}
   currentAttack: {fileID: 0}
+  hasPerformedAttack: 0
 --- !u!4 &845420356
 Transform:
   m_ObjectHideFlags: 0
@@ -2262,6 +2267,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lockOnTransform: {fileID: 1484006916}
   isRotatingWithRootMotion: 0
+  canRotate: 0
   currentState: {fileID: 1941710631}
   currentTarget: {fileID: 749034655}
   enemyRigidbody: {fileID: 0}
@@ -2269,7 +2275,7 @@ MonoBehaviour:
   isPerformingAction: 0
   isInteracting: 0
   rotationSpeed: 15
-  maximumAttackRange: 6
+  maximumAggroRadius: 5
   currentRecoveryTime: 0
 --- !u!4 &983663798
 Transform:
@@ -2341,10 +2347,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   combatStanceState: {fileID: 94382229}
-  enemyAttacks:
-  - {fileID: 11400000, guid: 83f73c358d93ee346a6024e6f880ca4c, type: 2}
-  - {fileID: 11400000, guid: 68c05c932f0990d4e84961742a29b1c0, type: 2}
+  rotateTowardsTargetState: {fileID: 1918146427}
+  pursueTargetState: {fileID: 233341297}
   currentAttack: {fileID: 0}
+  hasPerformedAttack: 0
 --- !u!1001 &1006038058
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4302,6 +4308,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   combatStanceState: {fileID: 1360783042}
+  rotateTowardsTargetState: {fileID: 0}
 --- !u!4 &1129788841
 Transform:
   m_ObjectHideFlags: 0
@@ -4474,6 +4481,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lockOnTransform: {fileID: 110998610}
   isRotatingWithRootMotion: 0
+  canRotate: 0
   currentState: {fileID: 1918146427}
   currentTarget: {fileID: 749034655}
   enemyRigidbody: {fileID: 0}
@@ -4481,7 +4489,7 @@ MonoBehaviour:
   isPerformingAction: 0
   isInteracting: 0
   rotationSpeed: 35.5
-  maximumAttackRange: 6
+  maximumAggroRadius: 25
   currentRecoveryTime: 0
 --- !u!114 &1168596412
 MonoBehaviour:
@@ -5042,6 +5050,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackState: {fileID: 845420355}
   pursueTargetState: {fileID: 1129788840}
+  enemyAttacks: []
 --- !u!4 &1360783043
 Transform:
   m_ObjectHideFlags: 0
@@ -8475,6 +8484,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b7191bb54f3ba543a41daae95b1e6c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  combatStanceState: {fileID: 94382229}
 --- !u!4 &1918146428
 Transform:
   m_ObjectHideFlags: 0

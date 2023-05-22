@@ -19,7 +19,7 @@ namespace NX
         public bool isPerformingAction;
         public bool isInteracting;
         public float rotationSpeed = 15;
-        public float maximumAttackRange = 5f;
+        public float maximumAggroRadius = 5f;
 
         public float currentRecoveryTime = 0;
 
@@ -43,6 +43,11 @@ namespace NX
             HandleRecoveryTimer();
             isInteracting = enemyAnimatorHandler.anim.GetBool("isInteracting");
             isRotatingWithRootMotion = enemyAnimatorHandler.anim.GetBool("isRotatingWithRootMotion");
+            canRotate = enemyAnimatorHandler.anim.GetBool("canRotate");
+
+
+            float distanceFromTarget = Vector3.Distance(currentTarget.transform.position, transform.position);
+            Debug.Log("distanceFromTarget = " + distanceFromTarget);
         }
 
         private void FixedUpdate()
