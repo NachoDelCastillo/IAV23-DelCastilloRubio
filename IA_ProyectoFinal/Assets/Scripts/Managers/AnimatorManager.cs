@@ -12,7 +12,7 @@ namespace NX
         {
             anim.applyRootMotion = isInteracting;
             anim.SetBool("isInteracting", isInteracting);
-            anim.SetBool("canRotate", isInteracting);
+            //anim.SetBool("canRotate", isInteracting);
             anim.CrossFade(targetAnim, .2f);
         }
 
@@ -21,7 +21,7 @@ namespace NX
             anim.applyRootMotion = isInteracting;
             anim.SetBool("isInteracting", isInteracting);
             anim.SetBool("isRotatingWithRootMotion", isInteracting);
-            anim.SetBool("canRotate", isInteracting);
+            //anim.SetBool("canRotate", isInteracting);
             anim.CrossFade(targetAnim, .2f);
         }
     }

@@ -27,8 +27,14 @@ namespace NX
             Vector3 velocity = deltaPosition / delta;
             enemyManager.enemyRigidbody.velocity = velocity;
 
-            if (enemyManager.isRotatingWithRootMotion)
-                enemyManager.transform.rotation *= anim.deltaRotation;
+            if (enemyManager.canRotate)
+            {
+                CombatStanceState.HandleRotateTowardsTarget(enemyManager);
+            }
+            {
+                if (enemyManager.isRotatingWithRootMotion)
+                    enemyManager.transform.rotation *= anim.deltaRotation;
+            }
         }
 
 
@@ -45,12 +51,12 @@ namespace NX
 
         public void EnableCanRotate()
         {
-            enemyManager.canRotate = true;
+            anim.SetBool("canRotate", true);
         }
 
         public void DisableCanRotate()
         {
-            enemyManager.canRotate = false;
+            anim.SetBool("canRotate", false);
         }
     }
 }

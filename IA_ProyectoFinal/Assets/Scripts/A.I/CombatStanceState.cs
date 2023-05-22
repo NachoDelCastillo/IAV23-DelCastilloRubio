@@ -7,6 +7,7 @@ namespace NX
 {
     public class CombatStanceState : State
     {
+        public IdleState idleState;
         public AttackState attackState;
         public PursueTargetState pursueTargetState;
 
@@ -30,7 +31,15 @@ namespace NX
 
         public override State Tick(EnemyManager enemyManager, EnemyStats enemyStats, EnemyAnimatorHandler enemyAnimatorHandler)
         {
-            float distanceFromTarget = Vector3.Distance(enemyManager.currentTarget.transform.position, enemyManager.transform.position);
+            // Comprobar si el jugador ha muerto
+            if (enemyManager.currentTarget.GetComponent<PlayerStats>().isDead)
+            {
+                enemyAnimatorHandler.PlayTargetAnimation("EnemyVictory", true);
+                return idleState;
+            }
+
+
+                float distanceFromTarget = Vector3.Distance(enemyManager.currentTarget.transform.position, enemyManager.transform.position);
 
             enemyAnimatorHandler.anim.SetFloat("Vertical", verticalMovementValue, 0.2f, Time.deltaTime);
             enemyAnimatorHandler.anim.SetFloat("Horizontal", horizontalMovementValue, 0.2f, Time.deltaTime);
@@ -98,7 +107,7 @@ namespace NX
             // Si el jugador se va fuera del rango de combate, cambiar al estado de persecucion
         }
 
-        public void HandleRotateTowardsTarget(EnemyManager enemyManager)
+        static public void HandleRotateTowardsTarget(EnemyManager enemyManager)
         {
             Vector3 direction = enemyManager.currentTarget.transform.position - enemyManager.transform.position;
             direction.y = 0;

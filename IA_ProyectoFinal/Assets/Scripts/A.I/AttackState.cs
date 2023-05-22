@@ -35,23 +35,10 @@ namespace NX {
                 return pursueTargetState;
             }
 
-            // Sistema de combos
-
-            //if (willDoComboNextAttack && enemyManager.canDoCombo)
-            //{
-            //      AttackTargetWithCombo(enemyAnimatorHandler, enemyManager);
-            //}
-
             if (!hasPerformedAttack)
             {
                 AttackTarget(enemyAnimatorHandler, enemyManager);
-                //RollForComboChance();
             }
-
-            //if (willDoComboNextAttack && hasPerformedAttack)
-            //{
-            //    return this;
-            //}
 
 
             return rotateTowardsTargetState;
@@ -71,25 +58,6 @@ namespace NX {
             enemyAnimatorHandler.PlayTargetAnimation(currentAttack.actionAnimation, true);
             enemyManager.currentRecoveryTime = currentAttack.recoveryTime;
             currentAttack = null;
-        }
-
-        private void RollForComboChance(EnemyManager enemyManager)
-        {
-            //float comboChance = Random.Range(0, 100);
-
-            //if (enemyManager.allowAIToPerformCombos && comboChance <= enemyManager.comboLikelyHood)
-            //{
-            //    if (currentAttack.comboAction != null)
-            //    {
-            //        willDoComboNextAttack = true;
-            //        currentAttack = currentAttack.comboAction;
-            //    }
-            //    else
-            //    {
-            //        willDoComboOnNextAttack = false;
-            //        currentAttack = null;
-            //    }
-            //}
         }
 
         public void RotateTowardsTargetWhileAttacking(EnemyManager enemyManager)

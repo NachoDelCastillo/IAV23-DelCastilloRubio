@@ -38,7 +38,7 @@ namespace NX
                 if (enemyManager.canRotate)
                 {
                     Debug.Log("CANROTATE");
-                    combatStanceState.HandleRotateTowardsTarget(enemyManager);
+                    CombatStanceState.HandleRotateTowardsTarget(enemyManager);
                 }
 
                 return this;
