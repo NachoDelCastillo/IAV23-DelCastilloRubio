@@ -101,18 +101,7 @@ namespace NX
 
         private void WalkAroundTarget(EnemyAnimatorHandler enemyAnimatorHandler)
         {
-            verticalMovementValue = 0.5f;
-
-            //verticalMovementValue = Random.Range(0, 1);
-
-            //if (verticalMovementValue <= 1 && verticalMovementValue > 0)
-            //{
-            //    verticalMovementValue = .5f;
-            //}
-            //else if (verticalMovementValue >= -1 && verticalMovementValue < 0)
-            //{
-            //    verticalMovementValue = -.5f;
-            //}
+            verticalMovementValue = 0.1f;
 
             horizontalMovementValue = Random.Range(-1, 1f);
 

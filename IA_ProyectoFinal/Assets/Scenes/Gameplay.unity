@@ -4489,7 +4489,7 @@ MonoBehaviour:
   isPerformingAction: 0
   isInteracting: 0
   rotationSpeed: 35.5
-  maximumAggroRadius: 25
+  maximumAggroRadius: 35
   currentRecoveryTime: 0
 --- !u!114 &1168596412
 MonoBehaviour:

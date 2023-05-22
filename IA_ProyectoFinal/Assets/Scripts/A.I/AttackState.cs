@@ -62,6 +62,7 @@ namespace NX {
             enemyAnimatorHandler.PlayTargetAnimation(currentAttack.actionAnimation, true);
             enemyManager.currentRecoveryTime = currentAttack.recoveryTime;
             hasPerformedAttack = true;
+            currentAttack = null; //////
         }
 
         private void AttackTargetWithCombo(EnemyAnimatorHandler enemyAnimatorHandler, EnemyManager enemyManager)
