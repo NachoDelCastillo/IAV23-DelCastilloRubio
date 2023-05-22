@@ -35,7 +35,8 @@ namespace NX
 
             if (velThisFrame != Vector3.zero)
             {
-                direction = -playerRb.velocity;
+                direction = Vector3.Lerp(direction, -playerRb.velocity, Time.deltaTime * 2);
+                //direction = -playerRb.velocity;
                 direction.y = 0;
                 direction.Normalize();
             }
@@ -45,14 +46,12 @@ namespace NX
 
             velocityLerper = Mathf.Lerp(velocityLerper, velocityValueOverOne, Time.deltaTime * 2);
 
-            directionLerped = Vector3.Lerp(directionLerped, direction, Time.deltaTime * 2);
-
             Debug.Log("velocityValueOverOne = " + velocityValueOverOne);
             Debug.Log("velocityLerper = " + velocityLerper);
 
-            transform.forward = Vector3.Lerp(transform.forward, directionLerped, velocityLerper);
+           // transform.forward = Vector3.Lerp(transform.forward, direction, velocityLerper);
 
-            transform.up = Vector3.Lerp(Vector3.up, direction, velocityLerper);
+            transform.up = Vector3.Lerp(Vector3.up, direction, velocityLerper + .1f);
         }
     }
 }
