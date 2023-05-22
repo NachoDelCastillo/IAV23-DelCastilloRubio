@@ -13,8 +13,8 @@ namespace NX
         [SerializeField]
         float followSpeed;
 
-        Transform playerTr;
-        Rigidbody playerRb;
+        [SerializeField]
+        Rigidbody rb;
 
         float velocityLerper = 0;
         Vector3 direction;
@@ -23,25 +23,23 @@ namespace NX
         private void Awake()
         {
             PlayerManager player = FindObjectOfType<PlayerManager>();
-            playerTr = player.transform;
-            playerRb = player.GetComponent<Rigidbody>();
         }
 
         private void Update()
         {
             transform.position = Vector3.Lerp(transform.position, target.position, followSpeed * Time.deltaTime);
 
-            Vector3 velThisFrame = -playerRb.velocity;
+            Vector3 velThisFrame = -rb.velocity;
 
             if (velThisFrame != Vector3.zero)
             {
-                direction = Vector3.Lerp(direction, -playerRb.velocity, Time.deltaTime * 2);
+                direction = Vector3.Lerp(direction, -rb.velocity, Time.deltaTime * 2);
                 //direction = -playerRb.velocity;
                 direction.y = 0;
                 direction.Normalize();
             }
 
-            float velocityMagnitude = playerRb.velocity.magnitude;
+            float velocityMagnitude = rb.velocity.magnitude;
             float velocityValueOverOne = velocityMagnitude / 20;
 
             velocityLerper = Mathf.Lerp(velocityLerper, velocityValueOverOne, Time.deltaTime * 2);
