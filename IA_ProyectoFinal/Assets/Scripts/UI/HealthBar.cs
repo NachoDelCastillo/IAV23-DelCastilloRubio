@@ -32,6 +32,8 @@ namespace NX
                 newImage.transform.SetParent(horizontalLayout);
 
                 healthImages[i] = newImage.AddComponent<Image>();
+
+                newImage.GetComponent<Image>().color = new Color(0, 0, 0, 0);
             }
 
             SetCurrentHealth(maxHealth);
