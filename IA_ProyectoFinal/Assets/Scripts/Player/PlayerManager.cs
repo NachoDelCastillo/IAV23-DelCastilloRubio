@@ -40,12 +40,12 @@ namespace NX
                 if (isSprinting)
                 {
                     animatorHandler.EnableTrailOnFoot();
-                    animatorHandler.EnableTrailOnSword();
+                    //animatorHandler.EnableTrailOnSword();
                 }
                 else
                 {
                     animatorHandler.DisableTrailOnFoot();
-                    animatorHandler.DisableTrailOnSword();
+                    //animatorHandler.DisableTrailOnSword();
                 }
             }
 

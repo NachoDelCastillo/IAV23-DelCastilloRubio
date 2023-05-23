@@ -49,9 +49,14 @@ public class PlayerStats : CharacterStats
             currentHealth = 0;
             animatorHandler.PlayTargetAnimation("Death", true);
             isDead = true;
+
+            ParticleManager.GetInstance().Play("SparksAndLines_Blue", transform.position);
+            ParticleManager.GetInstance().Play("SparksAndLines_Blue", transform.position);
+            ParticleManager.GetInstance().Play("SparksAndLines_Blue", transform.position);
         }
         else
         {
+            ParticleManager.GetInstance().Play("SparksAndLines_Blue", transform.position);
             animatorHandler.PlayTargetAnimation("Damage", true);
         }
     }

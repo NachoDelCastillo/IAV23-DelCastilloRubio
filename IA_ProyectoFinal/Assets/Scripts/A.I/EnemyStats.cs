@@ -34,6 +34,8 @@ namespace NX
             delayFill.fillAmount = Mathf.Lerp(delayFill.fillAmount, healthAmount, Time.deltaTime / 2);
         }
 
+
+        Vector3 particleOffset = new Vector3(0, 4, 0);
         public void TakeDamage(int damage)
         {
             if (isDead)
@@ -43,11 +45,19 @@ namespace NX
 
             //anim.Play("Damage");
 
+            ParticleManager.GetInstance().Play("SparksAndLines_Orange", transform.position + particleOffset);
+
             if (currentHealth <= 0)
             {
                 currentHealth = 0;
                 anim.Play("Death");
                 isDead = true;
+
+                ParticleManager.GetInstance().Play("SparksAndLines_Orange", transform.position + particleOffset);
+                ParticleManager.GetInstance().Play("SparksAndLines_Orange", transform.position + particleOffset);
+                ParticleManager.GetInstance().Play("SparksAndLines_Orange", transform.position + particleOffset);
+                ParticleManager.GetInstance().Play("SparksAndLines_Orange", transform.position + particleOffset);
+                ParticleManager.GetInstance().Play("SparksAndLines_Orange", transform.position + particleOffset);
             }
         }
     }
