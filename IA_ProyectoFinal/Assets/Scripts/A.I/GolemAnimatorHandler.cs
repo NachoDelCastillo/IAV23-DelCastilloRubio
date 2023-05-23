@@ -8,7 +8,10 @@ namespace NX
     public class GolemAnimatorHandler : EnemyAnimatorHandler
     {
         [SerializeField]
-        DamageCollider swing;
+        DamageCollider rightPunch;
+
+        [SerializeField]
+        DamageCollider leftPunch;
 
         [SerializeField]
         DamageCollider floorSlam;
@@ -17,10 +20,15 @@ namespace NX
         GameObject explosion;
 
 
-        public void EnableDC_Swing()
-        { swing.EnableDamageCollider(); }
-        public void DisableDC_Swing()
-        { swing.DisableDamageCollider(); }
+        public void EnableDC_RightPunch()
+        { rightPunch.EnableDamageCollider(); }
+        public void DisableDC_RightPunch()
+        { rightPunch.DisableDamageCollider(); }
+
+        public void EnableDC_LeftPunch()
+        { leftPunch.EnableDamageCollider(); }
+        public void DisableDC_LeftPunch()
+        { leftPunch.DisableDamageCollider(); }
 
         public void EnableDC_FloorSlam()
         { floorSlam.EnableDamageCollider(); }

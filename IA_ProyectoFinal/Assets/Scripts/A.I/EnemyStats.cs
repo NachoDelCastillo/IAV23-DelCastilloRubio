@@ -13,6 +13,9 @@ namespace NX
         [SerializeField]
         Image delayFill;
 
+        [SerializeField]
+        ParticleSystem flameHeart;
+
         Animator anim;
 
         private void Awake()
@@ -58,7 +61,17 @@ namespace NX
                 ParticleManager.GetInstance().Play("SparksAndLines_Orange", transform.position + particleOffset);
                 ParticleManager.GetInstance().Play("SparksAndLines_Orange", transform.position + particleOffset);
                 ParticleManager.GetInstance().Play("SparksAndLines_Orange", transform.position + particleOffset);
+
+                StartCoroutine(FlameStop());
             }
+        }
+
+        IEnumerator FlameStop()
+        {
+            yield return new WaitForSeconds(2f);
+            flameHeart.Stop();
+
+            MessageManager.GetInstance().PlayMessage("flame extinguished", MessageManager.ColorName.blue, MessageManager.MessagesName.fadeBlackLine);
         }
     }
 }

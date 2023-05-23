@@ -29,6 +29,8 @@ namespace NX
         float maxMovementTime = 6;
         float minMovementTime = 3;
 
+        string lastAttackName = "";
+
         public override State Tick(EnemyManager enemyManager, EnemyStats enemyStats, EnemyAnimatorHandler enemyAnimatorHandler)
         {
             // Comprobar si el jugador ha muerto
@@ -39,7 +41,7 @@ namespace NX
             }
 
 
-                float distanceFromTarget = Vector3.Distance(enemyManager.currentTarget.transform.position, enemyManager.transform.position);
+            float distanceFromTarget = Vector3.Distance(enemyManager.currentTarget.transform.position, enemyManager.transform.position);
 
             enemyAnimatorHandler.anim.SetFloat("Vertical", verticalMovementValue, 0.2f, Time.deltaTime);
             enemyAnimatorHandler.anim.SetFloat("Horizontal", horizontalMovementValue, 0.2f, Time.deltaTime);
@@ -208,6 +210,9 @@ namespace NX
                     if (viewableAngle <= enemyAttackAction.maximunAttackAngle
                         && viewableAngle >= enemyAttackAction.minimumAttackAngle)
                     {
+                        if (lastAttackName == enemyAttackAction.name)
+                            continue;
+
                         maxScore += enemyAttackAction.attackScore;
                     }
                 }
@@ -226,6 +231,9 @@ namespace NX
                     if (viewableAngle <= enemyAttackAction.maximunAttackAngle
                         && viewableAngle >= enemyAttackAction.minimumAttackAngle)
                     {
+                        if (lastAttackName == enemyAttackAction.name)
+                            continue;
+
                         if (attackState.currentAttack != null)
                             return;
 
@@ -234,6 +242,7 @@ namespace NX
                         if (temporaryScore > randomValue)
                         {
                             attackState.currentAttack = enemyAttackAction;
+                            lastAttackName = enemyAttackAction.name;
                         }
                     }
                 }

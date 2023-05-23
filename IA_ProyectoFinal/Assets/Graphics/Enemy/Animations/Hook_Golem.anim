@@ -101561,21 +101561,21 @@ AnimationClip:
     intParameter: 0
     messageOptions: 0
   - time: 0.8333333
-    functionName: EnableDC_Swing
+    functionName: EnableDC_RightPunch
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
   - time: 1.1
-    functionName: DisableDC_Swing
+    functionName: DisableDC_RightPunch
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
   - time: 2.3333333
-    functionName: EnableTrailOnPunch
+    functionName: DisableTrailOnPunch
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

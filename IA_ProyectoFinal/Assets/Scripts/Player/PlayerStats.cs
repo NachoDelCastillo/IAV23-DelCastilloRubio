@@ -1,6 +1,8 @@
 using NX;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.WindowsRuntime;
+using UnityEditor.Timeline.Actions;
 using UnityEngine;
 
 public class PlayerStats : CharacterStats
@@ -11,6 +13,8 @@ public class PlayerStats : CharacterStats
     [SerializeField]
     HealthBar healthBar;
 
+    [SerializeField]
+    ParticleSystem flameHeart;
 
     private void Awake()
     {
@@ -53,11 +57,21 @@ public class PlayerStats : CharacterStats
             ParticleManager.GetInstance().Play("SparksAndLines_Blue", transform.position);
             ParticleManager.GetInstance().Play("SparksAndLines_Blue", transform.position);
             ParticleManager.GetInstance().Play("SparksAndLines_Blue", transform.position);
+
+            StartCoroutine(FlameStop());
         }
         else
         {
             ParticleManager.GetInstance().Play("SparksAndLines_Blue", transform.position);
             animatorHandler.PlayTargetAnimation("Damage", true);
+        }
+
+        IEnumerator FlameStop()
+        {
+            yield return new WaitForSeconds(2f);
+            flameHeart.Stop();
+
+            MessageManager.GetInstance().PlayMessage("you died", MessageManager.ColorName.red, MessageManager.MessagesName.fadeBlackLine);
         }
     }
 }
