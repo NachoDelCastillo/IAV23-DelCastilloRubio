@@ -10,7 +10,7 @@ namespace NX
     // el parametro "enemyManager.maximumAggroRadius", pasa al estado de combate
 
 
-    public class PursueTargetState : State
+    public class PursueState : State
     {
         public CombatState combatStanceState;
         public RotateTowardsTargetState rotateTowardsTargetState;
@@ -59,30 +59,13 @@ namespace NX
         // Rotar usando navmesh, o manualmente
         public void HandleRotateTowardsTarget(EnemyManager enemyManager)
         {
-            // Rotar manualmente
-            if (enemyManager.isPerformingAction)
-            {
-                Vector3 direction = enemyManager.currentTarget.transform.position - enemyManager.transform.position;
-                direction.y = 0;
-                direction.Normalize();
-
-                if (direction == Vector3.zero)
-                    direction = enemyManager.transform.forward;
-
-                Quaternion targetRotation = Quaternion.LookRotation(direction);
-                enemyManager.transform.rotation = Quaternion.Slerp(enemyManager.transform.rotation, targetRotation, enemyManager.rotationSpeed / Time.deltaTime);
-            }
-            // Rotar usando pathfinding
-            else
-            {
-                // Seguir al jugador
-                Vector3 relativeDirection = enemyManager.transform.InverseTransformDirection(enemyManager.navMeshAgent.desiredVelocity);
-                Vector3 targetVelocity = enemyManager.enemyRigidbody.velocity;
-                enemyManager.navMeshAgent.enabled = true;
-                enemyManager.navMeshAgent.SetDestination(enemyManager.currentTarget.transform.position);
-                enemyManager.enemyRigidbody.velocity = targetVelocity;
-                enemyManager.transform.rotation = Quaternion.Slerp(enemyManager.transform.rotation, enemyManager.navMeshAgent.transform.rotation, enemyManager.rotationSpeed / Time.deltaTime);
-            }
+            // Seguir al jugador usando navmesh
+            Vector3 relativeDirection = enemyManager.transform.InverseTransformDirection(enemyManager.navMeshAgent.desiredVelocity);
+            Vector3 targetVelocity = enemyManager.enemyRigidbody.velocity;
+            enemyManager.navMeshAgent.enabled = true;
+            enemyManager.navMeshAgent.SetDestination(enemyManager.currentTarget.transform.position);
+            enemyManager.enemyRigidbody.velocity = targetVelocity;
+            enemyManager.transform.rotation = Quaternion.Slerp(enemyManager.transform.rotation, enemyManager.navMeshAgent.transform.rotation, enemyManager.rotationSpeed / Time.deltaTime);
         }
     }
 }

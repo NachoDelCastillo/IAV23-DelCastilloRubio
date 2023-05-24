@@ -7,7 +7,7 @@ namespace NX {
     {
         public CombatState combatStanceState;
         public RotateTowardsTargetState rotateTowardsTargetState;
-        public PursueTargetState pursueTargetState;
+        public PursueState pursueTargetState;
         public EnemyAttackAction currentAttack;
 
 
@@ -18,64 +18,31 @@ namespace NX {
         {
             // Elegir un ataque
 
-            // Si el ataque seleccionado no puede usarse (angulo no apropiado o distancia)
-            // Si es valido, parar el movimiento y atacar el target (jugador)
-
-            // Activar el recovery timer para dejar al jugador una oportunidad de atacar despues del ataque
-
             // Volver al estado de combate
-
             float distanceFromTarget = Vector3.Distance(enemyManager.currentTarget.transform.position, enemyManager.transform.position);
 
-            RotateTowardsTargetWhileAttacking(enemyManager);
-
+            // Cambia al estado de persecucion si el jugador se aleja demasiado
             if (distanceFromTarget > enemyManager.maximumAggroRadius)
-            {
                 return pursueTargetState;
-            }
 
+            // Si todavia no se a realizado el ataque elegido en el estado de combate, ejecutarlo
             if (!hasPerformedAttack)
-            {
                 AttackTarget(enemyAnimatorHandler, enemyManager);
-            }
 
 
+            // Cuando se haya realizado el ataque, pasar al estado de rotacion hacia el jugador
             return rotateTowardsTargetState;
         }
 
+        // Se encarga de ejecutar las animaciones y actualizar los valores de ataque
         private void AttackTarget(EnemyAnimatorHandler enemyAnimatorHandler, EnemyManager enemyManager)
         {
             enemyAnimatorHandler.PlayTargetAnimation(currentAttack.actionAnimation, true);
+            // Activar el recovery timer para dejar al jugador una oportunidad de atacar despues del ataque
             enemyManager.currentRecoveryTime = currentAttack.recoveryTime;
+            // Actualizar las variables
             hasPerformedAttack = true;
             currentAttack = null; //////
         }
-
-        private void AttackTargetWithCombo(EnemyAnimatorHandler enemyAnimatorHandler, EnemyManager enemyManager)
-        {
-            willDoComboNextAttack = false;
-            enemyAnimatorHandler.PlayTargetAnimation(currentAttack.actionAnimation, true);
-            enemyManager.currentRecoveryTime = currentAttack.recoveryTime;
-            currentAttack = null;
-        }
-
-        public void RotateTowardsTargetWhileAttacking(EnemyManager enemyManager)
-        {
-            if (enemyManager.canRotate && enemyManager.isInteracting)
-            {
-                Vector3 direction = enemyManager.currentTarget.transform.position - enemyManager.transform.position;
-                direction.y = 0;
-                direction.Normalize();
-
-                if (direction == Vector3.zero)
-                    direction = enemyManager.transform.forward;
-
-                Quaternion targetRotation = Quaternion.LookRotation(direction);
-                //enemyManager.transform.rotation = Quaternion.Slerp(enemyManager.transform.rotation, targetRotation, (enemyManager.rotationSpeed * .005f) / Time.deltaTime);
-                enemyManager.transform.rotation = Quaternion.Slerp
-                    (enemyManager.transform.rotation, targetRotation, 5 * Time.deltaTime);
-            }
-        }
-
     }
 }

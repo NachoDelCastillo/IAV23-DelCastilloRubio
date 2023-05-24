@@ -11,7 +11,7 @@ namespace NX
 
     public class SleepState : State
     {
-        public PursueTargetState pursueTargetState;
+        public PursueState pursueTargetState;
 
         public bool isSleeping;
         public float detectionRadius = 2;

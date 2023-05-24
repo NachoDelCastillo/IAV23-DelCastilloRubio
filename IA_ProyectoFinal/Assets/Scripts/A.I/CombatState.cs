@@ -6,13 +6,22 @@ using UnityEngine;
 namespace NX
 {
     // El estado mas complicado de todos
-    // En este estado, el enemigo decide de que forma acercarse al jugador dependiendo
-    // de la variable "combatWalkingTypes", facilmente modificable
+
+    // Comprueba si el jugador ha muerto, en dicho caso, asigna la animacion correspondiente y pasa al estado Idle
+    // Se encarga de tener al jugador de frente constantemente, calculando y modificando su siguiente rotacion
 
     // ELECCION DE ATAQUES
     // Tambien se encarga de calcular que ataque deberia ejecutarse en cada momento
     // Cada ataque tiene una variable que determina la probabilidad de que sea elegido 
     // sobre el resto (AttackScore), se suman todos los numeros y se elige uno aleatorio
+    // Esta programado de forma que no se pueda eleguir el mismo ataque dos veces seguidas
+
+    // Cada ataque tiene su propio tiempo de recovery, que es el numero de segundos que tiene que pasar antes de 
+    // realizar otro ataque
+
+    // FORMA EN LA QUE ACERCARSE AL JUGADOR
+    // En este estado, el enemigo decide de que forma acercarse al jugador dependiendo
+    // de la variable "combatWalkingTypes", facilmente modificable
 
 
 
@@ -20,7 +29,7 @@ namespace NX
     {
         public IdleState idleState;
         public AttackState attackState;
-        public PursueTargetState pursueTargetState;
+        public PursueState pursueTargetState;
 
         public EnemyAttackAction[] enemyAttacks;
 
@@ -44,7 +53,7 @@ namespace NX
 
         public override State Tick(EnemyManager enemyManager, EnemyStats enemyStats, EnemyAnimatorHandler enemyAnimatorHandler)
         {
-            // Comprobar si el jugador ha muerto
+            // Comprobar si el jugador ha muerto, en dicho caso, asigna la animacion correspondiente y pasa al estado Idle
             if (enemyManager.currentTarget.GetComponent<PlayerStats>().isDead)
             {
                 enemyAnimatorHandler.PlayTargetAnimation("EnemyVictory", true);
@@ -187,6 +196,8 @@ namespace NX
             {
                 EnemyAttackAction enemyAttackAction = enemyAttacks[i];
 
+                // Si el ataque seleccionado no puede usarse (angulo no apropiado o distancia)
+                // Si es valido, parar el movimiento y atacar el target (jugador)
                 if (distanceFromTarget <= enemyAttackAction.maximumDistanceNeededToAttack
                     && distanceFromTarget >= enemyAttackAction.minimumDistanceNeededToAttack)
                 {
