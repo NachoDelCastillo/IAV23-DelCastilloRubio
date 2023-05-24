@@ -10,7 +10,7 @@ public class AllMenuManager_PK : MonoBehaviour
 
     [SerializeField] float cameraSpeed;
 
-    float cameraDistanceX = 25;
+    float cameraDistanceX = 70;
     float cameraDistanceY = 15;
 
 
@@ -67,7 +67,7 @@ public class AllMenuManager_PK : MonoBehaviour
         mainMenu.enabled = false;
         StartCoroutine(EnableMenu(settingsMenu, true, cameraSpeed/2));
 
-        cameraObj.DOMoveY(-cameraDistanceY, cameraSpeed);
+        cameraObj.DOMoveY(cameraDistanceY, cameraSpeed);
     }
 
     public void PressControls()

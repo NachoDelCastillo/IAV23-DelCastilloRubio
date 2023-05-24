@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace NX
 {
-    public class AmbushState : State
+    public class SleepState : State
     {
         public PursueTargetState pursueTargetState;
 
