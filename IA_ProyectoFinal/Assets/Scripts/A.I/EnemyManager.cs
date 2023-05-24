@@ -38,17 +38,15 @@ namespace NX
             enemyRigidbody.isKinematic = false;
         }
 
+        //float distance = Vector3.Distance(currentTarget.transform.position, transform.position);
+        //Debug.Log("DISTANCE = " + distance);
+
+        //    Vector3 targetsDirection = currentTarget.transform.position - transform.position;
+        //float viewableAngle = Vector3.Angle(targetsDirection, transform.forward);
+        //Debug.Log("VIEW ANGLE = " + viewableAngle);
+
         private void Update()
         {
-
-            float distance = Vector3.Distance(currentTarget.transform.position, transform.position);
-            Debug.Log("DISTANCE = " + distance);
-
-            Vector3 targetsDirection = currentTarget.transform.position - transform.position;
-            float viewableAngle = Vector3.Angle(targetsDirection, transform.forward);
-            Debug.Log("VIEW ANGLE = " + viewableAngle);
-
-
             HandleRecoveryTimer();
             isInteracting = enemyAnimatorHandler.anim.GetBool("isInteracting");
             isRotatingWithRootMotion = enemyAnimatorHandler.anim.GetBool("isRotatingWithRootMotion");

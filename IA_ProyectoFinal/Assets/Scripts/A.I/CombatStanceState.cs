@@ -40,7 +40,6 @@ namespace NX
                 return idleState;
             }
 
-
             float distanceFromTarget = Vector3.Distance(enemyManager.currentTarget.transform.position, enemyManager.transform.position);
 
             enemyAnimatorHandler.anim.SetFloat("Vertical", verticalMovementValue, 0.2f, Time.deltaTime);
@@ -162,22 +161,6 @@ namespace NX
             verticalMovementValue = randomWalkType.verticalMovementValue;
             horizontalMovementValue = randomWalkType.horizontalMovementValue;
         }
-
-        //private void WalkAroundTarget(EnemyAnimatorHandler enemyAnimatorHandler)
-        //{
-        //    verticalMovementValue = 0.1f;
-
-        //    horizontalMovementValue = Random.Range(-1, 1f);
-
-        //    if (horizontalMovementValue <= 1 && horizontalMovementValue >= 0)
-        //    {
-        //        horizontalMovementValue = .5f;
-        //    }
-        //    else if (horizontalMovementValue >= -1 && horizontalMovementValue < 0)
-        //    {
-        //        horizontalMovementValue = -.5f;
-        //    }
-        //}
 
         private void WalkBack(EnemyAnimatorHandler enemyAnimatorHandler)
         {

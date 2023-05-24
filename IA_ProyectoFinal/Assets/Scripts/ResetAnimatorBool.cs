@@ -22,8 +22,11 @@ namespace NX
             animator.SetBool(canRotate, canRotateStatus);
 
             GolemAnimatorHandler animatorHandler = animator.transform.GetComponent<GolemAnimatorHandler>();
-            animatorHandler.DisableTrailOnFoot();
-            animatorHandler.DisableTrailOnPunch();
+            if (animatorHandler != null)
+            {
+                animatorHandler.DisableTrailOnFoot();
+                animatorHandler.DisableTrailOnPunch();
+            }
         }
     }
 
