@@ -82,6 +82,7 @@ public class AllMenuManager_PK : MonoBehaviour
         mainMenu.enabled = false;
 
         cameraObj.DOMoveX(cameraDistanceX, cameraSpeed);
+        //cameraObj.DOMoveY(12.14f - 3.94f, cameraSpeed);
     }
 
     #endregion
