@@ -7,7 +7,7 @@ namespace NX
 {
     public class EnemyManager : CharacterManager
     {
-        EnemyLocomotion enemyLocomotion;
+        IgnoreCollisions enemyLocomotion;
         EnemyAnimatorHandler enemyAnimatorHandler;
         EnemyStats enemyStats;
 
@@ -25,7 +25,7 @@ namespace NX
 
         private void Awake()
         {
-            enemyLocomotion = GetComponent<EnemyLocomotion>();
+            enemyLocomotion = GetComponent<IgnoreCollisions>();
             enemyAnimatorHandler = GetComponentInChildren<EnemyAnimatorHandler>();
             enemyStats = GetComponent<EnemyStats>();
             enemyRigidbody = GetComponent<Rigidbody>();
