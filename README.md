@@ -593,7 +593,13 @@ public class IdleState : State
 
 **JEFE**
 
+Para un uso mas sencillo y organizado de la IA, he clasificado todas las posibles acciones como ScriptableObjects facilmente modificables.
 <img src="https://github.com/NachoDelCastillo/IAV23-DelCastilloRubio/blob/main/ReadmeImages/Acciones.PNG" />
+En estas acciones se pueden observar diferentes parametros, los cuales se tienen en cuenta desde el estado de combate dependiendo del contexto:
+**ActionAnimation : ** Nombre de la animacion que realiza la accion
+**AttackScore : ** Probabilidad de que un ataque sea elegido sobre el resto, para elegir un ataque, todos los ataques posibles en cada frame se suman a una misma variable, cada uno sumando su respectiva Score, despues se elige una aleatoria, mientras mas Score tenga la accion, mas probabilidad de ejecutarse sobre las demas.  
+**Maximun/Minimum Attack Angle : ** Rango de vision del jefe a la hora de realizar este ataque, por ejemplo si es 35, -35 y el jugador se situa en la espalda del enemigo, la accion nunca sera elegida ya que solo tendra una oportunidad de ejecutarse si el angulo entre el jugador y el frente del enemigo es menor que 35 grados.
+**Maximun/Minimum Attack Distance : ** Igual que en el parametro anterior, solo que delimitando unas distancias maximas y minimas para que la IA sea mucho mas variada y precisa en sus decisiones.
 
 </br>
 <table>
