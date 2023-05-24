@@ -93,15 +93,32 @@ Una vez que el enemigo se ha acercado lo suficiente al jugador teniendo en cuent
 el parametro "enemyManager.maximumAggroRadius", pasa al estado de combate.
 
 - ****CombatState :**** </br>
+Comprueba si el jugador ha muerto, en dicho caso, asigna la animacion correspondiente y pasa al estado Idle
+Se encarga de tener al jugador de frente constantemente, calculando y modificando su siguiente rotacion
+
 ELECCION DE ATAQUES </br>
 Tambien se encarga de calcular que ataque deberia ejecutarse en cada momento
 Cada ataque tiene una variable que determina la probabilidad de que sea elegido
 sobre el resto (AttackScore), se suman todos los numeros y se elige uno aleatorio.
+Cada ataque tiene su propio tiempo de recovery, que es el numero de segundos que tiene que pasar antes de 
+realizar otro ataque
 
 FORMA EN LA QUE ACERCARSE AL JUGADOR </br>
 En este estado, el enemigo decide de que forma acercarse al jugador dependiendo
 de la variable "combatWalkingTypes", facilmente modificable.
 
+
+- ****AttackState :**** </br>
+
+
+- ****RotateTowardsTargetState :**** </br>
+
+
+- ****IdleState :**** </br>
+Estado cuyo unico proposito es que el enemigo no se mueva,
+Este estado se llama cuando el enemigo muere, junto a la animacion de muerte del mismo.
+Este estado tambien se llama cuando el jugador muere, donde el enemigo realiza en bucle
+la animacion de victoria hasta que se reinicie la escena.
 
 </br></br>
 ## ACCIONES
