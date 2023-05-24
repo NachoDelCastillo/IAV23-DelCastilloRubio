@@ -79,6 +79,20 @@ Los scripts relevantes para la inteligencia artificial del enemigo son los sigui
 
 - ****EnemyStats :**** </br>Almacena informacion acerca de la vida restante del enemigo y funciones relacionadas con la misma, como recibir daño del jugador. Tambien actualiza la interfaz para mostrarselo en todo momento al jugador por pantalla.
 
+</br></br>
+****ESTADOS****</br>
+
+    using System.Collections;
+    using System.Collections.Generic;
+    using UnityEngine;
+    
+    namespace NX
+    {
+        public abstract class State : MonoBehaviour
+        {
+            public abstract State Tick(EnemyManager enemyManager, EnemyStats enemyStats, EnemyAnimatorHandler enemyAnimatorHandler);
+        }
+    }
 Para la maquina de estados del enemigo se utilizan los siguientes estados:
 
 - ****SleepState :**** </br>
