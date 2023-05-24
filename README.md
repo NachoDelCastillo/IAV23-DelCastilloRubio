@@ -67,17 +67,39 @@ Pero como el ataque cuerpo a cuerpo es la unica opcion para el jugador, estara o
 
 </br></br>
 ## INFRAESTRUCTURA
+</br>
+****SCRIPTS DEL JEFE****</br>
 
-Para el correcto funcionamiento del gameplay en este juego, han sido necesarios muchos scripts extra que no tienen nada que ver con la Inteligencia Artificial del Enemigo.
+Para el funcionamiento del juego presentado, han sido necesarios muchos scripts extra que no tienen nada que ver con la Inteligencia Artificial del Enemigo. Por lo que no se mencionaran en la documentación.
 Los scripts relevantes para la inteligencia artificial del enemigo son los siguientes: (Assets/Scripts/A.I):
 
-- ****EnemyManager :**** </br> Es el script principal del enemigo, en el se organiza el resto de funcionalidades repartidas en el resto de scripts. Tambien se ocupa de calcular el area de proximidad en el que se encuentra el jugador y dependiendo de la misma elegir nuevas acciones durante todo el combate.
-
-- ****EnemyAction / EnemyAttackAction :**** </br>ScriptableObjects que definen las posibles acciones del Jefe, almacenando informacion (dependiendo del tipo de accion) como el angulo necesario entre el frente del enemigo y el jugador para poder realizar la accion, el area de proximidad a la que pertenece esta accion, la probabilidad de que esta accion se eliga sobre las demas o el tiempo de recuperacion (tiempo que el enemigo debe esperar antes de realizar otro ataque).
+- ****EnemyManager :**** </br> 
+Es el script principal del enemigo, en el se organiza el resto de funcionalidades repartidas en el resto de scripts.
+Tambien es el encargado de gestionar el funcionamiento y transicion de estados de la maquina de estados, la cual se emplea para determinar las acciones del Jefe en todo momento
 
 - ****EnemyAnimator :**** </br>Encapsula todo lo que tiene que ver con el manejo de las animaciones del enemigo y su comunicacion con el resto de scripts
 
 - ****EnemyStats :**** </br>Almacena informacion acerca de la vida restante del enemigo y funciones relacionadas con la misma, como recibir daño del jugador. Tambien actualiza la interfaz para mostrarselo en todo momento al jugador por pantalla.
+
+- ****EnemyAction / EnemyAttackAction :**** </br>ScriptableObjects que definen las posibles acciones del Jefe, almacenando informacion (dependiendo del tipo de accion) como el angulo necesario entre el frente del enemigo y el jugador para poder realizar la accion, el area de proximidad a la que pertenece esta accion, la probabilidad de que esta accion se eliga sobre las demas o el tiempo de recuperacion (tiempo que el enemigo debe esperar antes de realizar otro ataque).
+
+</br></br>
+****ESTADOS****</br>
+
+Para gestionar los estados, estos mismos heredan de la clase **State**, la cual solo tiene el metodo Tick, el cual se llamara desde la maquina de estados del enemyManager dependiendo del estado actual del Jefe.</br>
+En este metodo "Tick" se añade la funcionalidad particular de cada estado, en la cual se puede cambiar de estado facilmente usando el "return" con un estado distinto, o usando "return this" si se quiere permanecer en el mismo estado.
+
+    using System.Collections;
+    using System.Collections.Generic;
+    using UnityEngine;
+    
+    namespace NX
+    {
+        public abstract class State : MonoBehaviour
+        {
+            public abstract State Tick(EnemyManager enemyManager, EnemyStats enemyStats, EnemyAnimatorHandler enemyAnimatorHandler);
+        }
+    }
 
 Para la maquina de estados del enemigo se utilizan los siguientes estados:
 
@@ -87,21 +109,191 @@ En este estado, el enemigo se esta quieto y repite en loop la animacion asignada
 con el parametro "sleepAnimation", cuando el jugador se acerca a menos de "detectionRadius"
 de distancia, el estado cambia al estado "PursueTargetState" en el que se perseguira al jugador.
 
+    public class SleepState : State
+    {
+        public PursueState pursueTargetState;
+    
+        public bool isSleeping;
+        public float detectionRadius = 2;
+        public string sleepAnimation;
+        public string wakeAnimation;
+    
+        public override State Tick(EnemyManager enemyManager, EnemyStats enemyStats, EnemyAnimatorHandler enemyAnimatorHandler)
+        {
+            // Si esta durmiendo, poner la animacion de dormir
+            if (isSleeping && !enemyManager.isInteracting)
+                enemyAnimatorHandler.PlayTargetAnimation(sleepAnimation, true);
+    
+            // Comprueba si el jugador esta a menos de la distancia parametrizada
+            #region Detectar al jugador
+    
+            Collider[] colliders = Physics.OverlapSphere(enemyManager.transform.position, detectionRadius);
+    
+            for (int i = 0; i < colliders.Length; i++)
+            {
+                PlayerStats playerStats = colliders[i].transform.GetComponent<PlayerStats>();
+    
+                if (playerStats != null)
+                {
+                    Vector3 targetDirection = playerStats.transform.position - enemyManager.transform.position;
+    
+                    //enemyManager.currentTarget = playerStats;
+                    isSleeping = false;
+                    enemyAnimatorHandler.PlayTargetAnimation(wakeAnimation, true);
+    
+                    return pursueTargetState;
+                }
+            }
+    
+            #endregion
+    
+            // Si no se ha detectado al jugador, seguir en este estado
+            return this;
+        }
+    }
+    
+</br></br>
 - ****PursueState :**** </br>
 En este estado, la IA hace uso del NavMesh para acercarse al jugador
 Una vez que el enemigo se ha acercado lo suficiente al jugador teniendo en cuenta
 el parametro "enemyManager.maximumAggroRadius", pasa al estado de combate.
 
+    public class PursueState : State
+    {
+        public CombatState combatStanceState;
+        public RotateTowardsTargetState rotateTowardsTargetState;
+
+        public override State Tick(EnemyManager enemyManager, EnemyStats enemyStats, EnemyAnimatorHandler enemyAnimatorHandler)
+        {
+            Vector3 targetDirection = enemyManager.currentTarget.transform.position - enemyManager.transform.position;
+            float distanceFromTarget = Vector3.Distance(enemyManager.currentTarget.transform.position, enemyManager.transform.position);
+            float viewableAngle = Vector3.SignedAngle(targetDirection, enemyManager.transform.forward, Vector3.up);
+
+            // Se encarga de mover al enemigo hacia el jugador, ya sea usando Navmesh o rotacion manual usando matematicas
+            HandleRotateTowardsTarget(enemyManager);
+
+            // Si no esta mirando al jugador, pasar al estado de Rotate para tenerle de frente
+            if (viewableAngle > 65 || viewableAngle < -65)
+                return rotateTowardsTargetState;
+
+
+            if (enemyManager.isPerformingAction)
+            {
+                enemyAnimatorHandler.anim.SetFloat("Vertical", 0, 0.1f, Time.deltaTime);
+
+                // Si se esta en medio de un ataque y se permite rotar en el ataque
+                if (enemyManager.canRotate)
+                    CombatState.HandleRotateTowardsTarget(enemyManager);
+
+                return this;
+            }
+
+
+            if (distanceFromTarget > enemyManager.maximumAggroRadius)
+                enemyAnimatorHandler.anim.SetFloat("Vertical", 1, 0.1f, Time.deltaTime);
+
+            enemyManager.navMeshAgent.transform.localPosition = Vector3.zero;
+            enemyManager.navMeshAgent.transform.localRotation = Quaternion.identity;
+
+
+            // Si esta en rango de combate, cambiar a estado de combate
+            if (distanceFromTarget <= enemyManager.maximumAggroRadius)
+                return combatStanceState;
+            // Si no esta en rango de combate, seguir persiguiendo
+            else
+                return this;
+        }
+
+        // Rotar usando navmesh, o manualmente
+        public void HandleRotateTowardsTarget(EnemyManager enemyManager)
+        {
+            // Seguir al jugador usando navmesh
+            Vector3 relativeDirection = enemyManager.transform.InverseTransformDirection(enemyManager.navMeshAgent.desiredVelocity);
+            Vector3 targetVelocity = enemyManager.enemyRigidbody.velocity;
+            enemyManager.navMeshAgent.enabled = true;
+            enemyManager.navMeshAgent.SetDestination(enemyManager.currentTarget.transform.position);
+            enemyManager.enemyRigidbody.velocity = targetVelocity;
+            enemyManager.transform.rotation = Quaternion.Slerp(enemyManager.transform.rotation, enemyManager.navMeshAgent.transform.rotation, enemyManager.rotationSpeed / Time.deltaTime);
+        }
+    }
+
 - ****CombatState :**** </br>
+Comprueba si el jugador ha muerto, en dicho caso, asigna la animacion correspondiente y pasa al estado Idle
+Se encarga de tener al jugador de frente constantemente, calculando y modificando su siguiente rotacion
+
 ELECCION DE ATAQUES </br>
 Tambien se encarga de calcular que ataque deberia ejecutarse en cada momento
 Cada ataque tiene una variable que determina la probabilidad de que sea elegido
 sobre el resto (AttackScore), se suman todos los numeros y se elige uno aleatorio.
+Cada ataque tiene su propio tiempo de recovery, que es el numero de segundos que tiene que pasar antes de 
+realizar otro ataque
 
 FORMA EN LA QUE ACERCARSE AL JUGADOR </br>
 En este estado, el enemigo decide de que forma acercarse al jugador dependiendo
 de la variable "combatWalkingTypes", facilmente modificable.
 
+
+- ****AttackState :**** </br>
+
+       public class AttackState : State
+       {
+           public CombatState combatStanceState;
+           public RotateTowardsTargetState rotateTowardsTargetState;
+           public PursueState pursueTargetState;
+           public EnemyAttackAction currentAttack;
+   
+   
+           bool willDoComboNextAttack = false;
+           public bool hasPerformedAttack = false;
+   
+           public override State Tick(EnemyManager enemyManager, EnemyStats enemyStats, EnemyAnimatorHandler enemyAnimatorHandler)
+           {
+               // Elegir un ataque
+   
+               // Volver al estado de combate
+               float distanceFromTarget = Vector3.Distance(enemyManager.currentTarget.transform.position, enemyManager.transform.position);
+   
+               // Cambia al estado de persecucion si el jugador se aleja demasiado
+               if (distanceFromTarget > enemyManager.maximumAggroRadius)
+                   return pursueTargetState;
+   
+               // Si todavia no se a realizado el ataque elegido en el estado de combate, ejecutarlo
+               if (!hasPerformedAttack)
+                   AttackTarget(enemyAnimatorHandler, enemyManager);
+   
+   
+               // Cuando se haya realizado el ataque, pasar al estado de rotacion hacia el jugador
+               return rotateTowardsTargetState;
+           }
+   
+           // Se encarga de ejecutar las animaciones y actualizar los valores de ataque
+           private void AttackTarget(EnemyAnimatorHandler enemyAnimatorHandler, EnemyManager enemyManager)
+           {
+               enemyAnimatorHandler.PlayTargetAnimation(currentAttack.actionAnimation, true);
+               // Activar el recovery timer para dejar al jugador una oportunidad de atacar despues del ataque
+               enemyManager.currentRecoveryTime = currentAttack.recoveryTime;
+               // Actualizar las variables
+               hasPerformedAttack = true;
+               currentAttack = null; //////
+           }
+       }
+
+- ****RotateTowardsTargetState :**** </br>
+
+
+- ****IdleState :**** </br>
+Estado cuyo unico proposito es que el enemigo no se mueva,
+Este estado se llama cuando el enemigo muere, junto a la animacion de muerte del mismo.
+Este estado tambien se llama cuando el jugador muere, donde el enemigo realiza en bucle
+la animacion de victoria hasta que se reinicie la escena.
+
+    public class IdleState : State
+    {
+        public override State Tick(EnemyManager enemyManager, EnemyStats enemyStats, EnemyAnimatorHandler enemyAnimatorHandler)
+        {
+            return this;
+        }
+    }
 
 </br></br>
 ## ACCIONES
