@@ -69,17 +69,39 @@ Pero como el ataque cuerpo a cuerpo es la unica opcion para el jugador, estara o
 ## INFRAESTRUCTURA
 
 Para el correcto funcionamiento del gameplay en este juego, han sido necesarios muchos scripts extra que no tienen nada que ver con la Inteligencia Artificial del Enemigo.
-Los unicos scripts relevantes oara la inteligencia artificial del enemigo son los siguientes (Assets/Scripts/A.I):
+Los scripts relevantes para la inteligencia artificial del enemigo son los siguientes: (Assets/Scripts/A.I):
 
 - ****EnemyManager :**** </br> Es el script principal del enemigo, en el se organiza el resto de funcionalidades repartidas en el resto de scripts. Tambien se ocupa de calcular el area de proximidad en el que se encuentra el jugador y dependiendo de la misma elegir nuevas acciones durante todo el combate.
 
 - ****EnemyAction / EnemyAttackAction :**** </br>ScriptableObjects que definen las posibles acciones del Jefe, almacenando informacion (dependiendo del tipo de accion) como el angulo necesario entre el frente del enemigo y el jugador para poder realizar la accion, el area de proximidad a la que pertenece esta accion, la probabilidad de que esta accion se eliga sobre las demas o el tiempo de recuperacion (tiempo que el enemigo debe esperar antes de realizar otro ataque).
 
-- ****EnemyLocomotion :**** </br>Se encarga de manejar el movimiento y rotacion del enemigo en todo momento manipulando el rigidbody, tambien activando y desactivando el NavMeshAgent cuando sea necesario, y calculando rotaciones con "Slerp" para un movimiento fluido
-
-- ****EnemyAnimator :**** </br>Encapsula todo lo que tiene que ver con el manejo de las animaciones del enemigo.
+- ****EnemyAnimator :**** </br>Encapsula todo lo que tiene que ver con el manejo de las animaciones del enemigo y su comunicacion con el resto de scripts
 
 - ****EnemyStats :**** </br>Almacena informacion acerca de la vida restante del enemigo y funciones relacionadas con la misma, como recibir daño del jugador. Tambien actualiza la interfaz para mostrarselo en todo momento al jugador por pantalla.
+
+Para la maquina de estados del enemigo se utilizan los siguientes estados:
+
+- ****SleepState :**** 
+Estado en el que comienza el enemigo
+En este estado, el enemigo se esta quieto y repite en loop la animacion asignada
+con el parametro "sleepAnimation", cuando el jugador se acerca a menos de "detectionRadius"
+de distancia, el estado cambia al estado "PursueTargetState" en el que se perseguira al jugador.
+
+- ****PursueState :**** 
+En este estado, la IA hace uso del NavMesh para acercarse al jugador
+Una vez que el enemigo se ha acercado lo suficiente al jugador teniendo en cuenta
+el parametro "enemyManager.maximumAggroRadius", pasa al estado de combate.
+
+- ****CombatState :**** 
+ELECCION DE ATAQUES
+Tambien se encarga de calcular que ataque deberia ejecutarse en cada momento
+Cada ataque tiene una variable que determina la probabilidad de que sea elegido
+sobre el resto (AttackScore), se suman todos los numeros y se elige uno aleatorio.
+
+FORMA EN LA QUE ACERCARSE AL JUGADOR
+En este estado, el enemigo decide de que forma acercarse al jugador dependiendo
+de la variable "combatWalkingTypes", facilmente modificable.
+
 
 </br></br>
 ## ACCIONES
