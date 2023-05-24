@@ -109,6 +109,7 @@ En este estado, el enemigo se esta quieto y repite en loop la animacion asignada
 con el parametro "sleepAnimation", cuando el jugador se acerca a menos de "detectionRadius"
 de distancia, el estado cambia al estado "PursueTargetState" en el que se perseguira al jugador.
 
+```
     public class SleepState : State
     {
         public PursueState pursueTargetState;
@@ -151,6 +152,7 @@ de distancia, el estado cambia al estado "PursueTargetState" en el que se perseg
             return this;
         }
     }
+```
     
 </br></br>
 - ****PursueState :**** </br>
