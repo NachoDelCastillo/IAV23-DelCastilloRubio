@@ -67,20 +67,27 @@ Pero como el ataque cuerpo a cuerpo es la unica opcion para el jugador, estara o
 
 </br></br>
 ## INFRAESTRUCTURA
+</br>
+****SCRIPTS DEL JEFE****</br>
 
-Para el correcto funcionamiento del gameplay en este juego, han sido necesarios muchos scripts extra que no tienen nada que ver con la Inteligencia Artificial del Enemigo.
+Para el funcionamiento del juego presentado, han sido necesarios muchos scripts extra que no tienen nada que ver con la Inteligencia Artificial del Enemigo. Por lo que no se mencionaran en la documentación.
 Los scripts relevantes para la inteligencia artificial del enemigo son los siguientes: (Assets/Scripts/A.I):
 
-- ****EnemyManager :**** </br> Es el script principal del enemigo, en el se organiza el resto de funcionalidades repartidas en el resto de scripts. Tambien se ocupa de calcular el area de proximidad en el que se encuentra el jugador y dependiendo de la misma elegir nuevas acciones durante todo el combate.
-
-- ****EnemyAction / EnemyAttackAction :**** </br>ScriptableObjects que definen las posibles acciones del Jefe, almacenando informacion (dependiendo del tipo de accion) como el angulo necesario entre el frente del enemigo y el jugador para poder realizar la accion, el area de proximidad a la que pertenece esta accion, la probabilidad de que esta accion se eliga sobre las demas o el tiempo de recuperacion (tiempo que el enemigo debe esperar antes de realizar otro ataque).
+- ****EnemyManager :**** </br> 
+Es el script principal del enemigo, en el se organiza el resto de funcionalidades repartidas en el resto de scripts.
+Tambien es el encargado de gestionar el funcionamiento y transicion de estados de la maquina de estados, la cual se emplea para determinar las acciones del Jefe en todo momento
 
 - ****EnemyAnimator :**** </br>Encapsula todo lo que tiene que ver con el manejo de las animaciones del enemigo y su comunicacion con el resto de scripts
 
 - ****EnemyStats :**** </br>Almacena informacion acerca de la vida restante del enemigo y funciones relacionadas con la misma, como recibir daño del jugador. Tambien actualiza la interfaz para mostrarselo en todo momento al jugador por pantalla.
 
+- ****EnemyAction / EnemyAttackAction :**** </br>ScriptableObjects que definen las posibles acciones del Jefe, almacenando informacion (dependiendo del tipo de accion) como el angulo necesario entre el frente del enemigo y el jugador para poder realizar la accion, el area de proximidad a la que pertenece esta accion, la probabilidad de que esta accion se eliga sobre las demas o el tiempo de recuperacion (tiempo que el enemigo debe esperar antes de realizar otro ataque).
+
 </br></br>
 ****ESTADOS****</br>
+
+Para gestionar los estados, estos mismos heredan de la clase **State**, la cual solo tiene el metodo Tick, el cual se llamara desde la maquina de estados del enemyManager dependiendo del estado actual del Jefe.</br>
+En este metodo "Tick" se añade la funcionalidad particular de cada estado, en la cual se puede cambiar de estado facilmente usando el "return" con un estado distinto, o usando "return this" si se quiere permanecer en el mismo estado.
 
     using System.Collections;
     using System.Collections.Generic;
@@ -93,6 +100,7 @@ Los scripts relevantes para la inteligencia artificial del enemigo son los sigui
             public abstract State Tick(EnemyManager enemyManager, EnemyStats enemyStats, EnemyAnimatorHandler enemyAnimatorHandler);
         }
     }
+
 Para la maquina de estados del enemigo se utilizan los siguientes estados:
 
 - ****SleepState :**** </br>
