@@ -81,24 +81,24 @@ Los scripts relevantes para la inteligencia artificial del enemigo son los sigui
 
 Para la maquina de estados del enemigo se utilizan los siguientes estados:
 
-- ****SleepState :**** 
+- ****SleepState :**** </br>
 Estado en el que comienza el enemigo
 En este estado, el enemigo se esta quieto y repite en loop la animacion asignada
 con el parametro "sleepAnimation", cuando el jugador se acerca a menos de "detectionRadius"
 de distancia, el estado cambia al estado "PursueTargetState" en el que se perseguira al jugador.
 
-- ****PursueState :**** 
+- ****PursueState :**** </br>
 En este estado, la IA hace uso del NavMesh para acercarse al jugador
 Una vez que el enemigo se ha acercado lo suficiente al jugador teniendo en cuenta
 el parametro "enemyManager.maximumAggroRadius", pasa al estado de combate.
 
-- ****CombatState :**** 
-ELECCION DE ATAQUES
+- ****CombatState :**** </br>
+ELECCION DE ATAQUES </br>
 Tambien se encarga de calcular que ataque deberia ejecutarse en cada momento
 Cada ataque tiene una variable que determina la probabilidad de que sea elegido
 sobre el resto (AttackScore), se suman todos los numeros y se elige uno aleatorio.
 
-FORMA EN LA QUE ACERCARSE AL JUGADOR
+FORMA EN LA QUE ACERCARSE AL JUGADOR </br>
 En este estado, el enemigo decide de que forma acercarse al jugador dependiendo
 de la variable "combatWalkingTypes", facilmente modificable.
 
