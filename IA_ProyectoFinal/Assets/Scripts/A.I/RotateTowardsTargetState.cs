@@ -6,7 +6,7 @@ namespace NX
 {
     public class RotateTowardsTargetState : State
     {
-        public CombatStanceState combatStanceState;
+        public CombatState combatStanceState;
 
         public override State Tick(EnemyManager enemyManager, EnemyStats enemyStats, EnemyAnimatorHandler enemyAnimatorHandler)
         {

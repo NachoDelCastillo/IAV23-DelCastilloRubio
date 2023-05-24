@@ -29,7 +29,7 @@ namespace NX
 
             if (enemyManager.canRotate)
             {
-                CombatStanceState.HandleRotateTowardsTarget(enemyManager);
+                CombatState.HandleRotateTowardsTarget(enemyManager);
             }
             {
                 if (enemyManager.isRotatingWithRootMotion)

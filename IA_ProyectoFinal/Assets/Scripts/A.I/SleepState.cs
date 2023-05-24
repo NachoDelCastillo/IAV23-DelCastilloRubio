@@ -4,6 +4,11 @@ using UnityEngine;
 
 namespace NX
 {
+    // Estado en el que comienza el enemigo
+    // En este estado, el enemigo se esta quieto y repite en loop la animacion asignada
+    // con el parametro "sleepAnimation", cuando el jugador se acerca a menos de "detectionRadius"
+    // de distancia, el estado cambia al estado "PursueTargetState" en el que se perseguira al jugador
+
     public class SleepState : State
     {
         public PursueTargetState pursueTargetState;
@@ -13,14 +18,13 @@ namespace NX
         public string sleepAnimation;
         public string wakeAnimation;
 
-
         public override State Tick(EnemyManager enemyManager, EnemyStats enemyStats, EnemyAnimatorHandler enemyAnimatorHandler)
         {
+            // Si esta durmiendo, poner la animacion de dormir
             if (isSleeping && !enemyManager.isInteracting)
-            {
                 enemyAnimatorHandler.PlayTargetAnimation(sleepAnimation, true);
-            }
 
+            // Comprueba si el jugador esta a menos de la distancia parametrizada
             #region Detectar al jugador
 
             Collider[] colliders = Physics.OverlapSphere(enemyManager.transform.position, detectionRadius);
@@ -43,17 +47,8 @@ namespace NX
 
             #endregion
 
-
-            #region Cambiar de estado
-
-            //if (enemyManager.currentTarget != null)
-            //    return pursueTargetState;
-            //else
-            //    return this;
-
+            // Si no se ha detectado al jugador, seguir en este estado
             return this;
-
-            #endregion
         }
     }
 }

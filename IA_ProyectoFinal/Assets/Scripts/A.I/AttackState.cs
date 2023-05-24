@@ -5,7 +5,7 @@ using UnityEngine;
 namespace NX {
     public class AttackState : State
     {
-        public CombatStanceState combatStanceState;
+        public CombatState combatStanceState;
         public RotateTowardsTargetState rotateTowardsTargetState;
         public PursueTargetState pursueTargetState;
         public EnemyAttackAction currentAttack;

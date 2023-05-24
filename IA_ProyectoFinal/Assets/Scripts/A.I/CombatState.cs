@@ -5,7 +5,18 @@ using UnityEngine;
 
 namespace NX
 {
-    public class CombatStanceState : State
+    // El estado mas complicado de todos
+    // En este estado, el enemigo decide de que forma acercarse al jugador dependiendo
+    // de la variable "combatWalkingTypes", facilmente modificable
+
+    // ELECCION DE ATAQUES
+    // Tambien se encarga de calcular que ataque deberia ejecutarse en cada momento
+    // Cada ataque tiene una variable que determina la probabilidad de que sea elegido 
+    // sobre el resto (AttackScore), se suman todos los numeros y se elige uno aleatorio
+
+
+
+    public class CombatState : State
     {
         public IdleState idleState;
         public AttackState attackState;
@@ -40,31 +51,34 @@ namespace NX
                 return idleState;
             }
 
+            // Distancia hasta el jugador
             float distanceFromTarget = Vector3.Distance(enemyManager.currentTarget.transform.position, enemyManager.transform.position);
 
+            // Mover el enemigo mediante los parametros de las animaciones
             enemyAnimatorHandler.anim.SetFloat("Vertical", verticalMovementValue, 0.2f, Time.deltaTime);
             enemyAnimatorHandler.anim.SetFloat("Horizontal", horizontalMovementValue, 0.2f, Time.deltaTime);
 
+            // Si se esta de vuelta en este estado, significa que el ataque que se estaba ejecutando ha terminado
             attackState.hasPerformedAttack = false;
 
+            // Si se esta realizando alguna accion, no permitir moverse
             if (enemyManager.isInteracting)
             {
                 enemyAnimatorHandler.anim.SetFloat("Vertical", 0);
                 enemyAnimatorHandler.anim.SetFloat("Horizontal", 0);
                 return this;
             }
+
+            // Si el jugador se va fuera del rango de combate, cambiar al estado de persecucion
             else if (distanceFromTarget > enemyManager.maximumAggroRadius)
-            {
-                //enemyManager.navMeshAgent.transform.rotation = enemyManager.transform.rotation;
                 return pursueTargetState;
-            }
 
 
-            // Caminar alrededor del jugador
+            // Acercarse al enemigo permutando entre diferentes formas de caminar
             if (!randomDestinationSet)
             {
                 randomDestinationSet = true;
-                // Decicir el destino aleatoriamente
+                // Decicir la forma de acercarse al enemigo aleatoriamente
                 DecideCirclingAction(enemyAnimatorHandler);
 
                 // Decidir dentro de cuanto tiempo se cambiara este estilo de andar
@@ -83,31 +97,24 @@ namespace NX
                 }
             }
 
-
+            // Mirar constantemente al jugador
             HandleRotateTowardsTarget(enemyManager);
 
-
-            // Comprobar si se esta a rango de ataque
+            // Si se ha elegido un ataque para realizar, pasar al estado de ataque
+            // Si se esta en un cool down despues de un ataque, seguir en este modo
             if (enemyManager.currentRecoveryTime <= 0 && attackState.currentAttack != null)
             {
                 randomDestinationSet = false;
                 return attackState;
             }
             else
-            {
+                // Elegir un nuevo ataque
                 GetNewAttack(enemyManager);
-            }
 
             return this;
-
-
-            // Si esta en rango de ataque, cambiar a estado de ataque
-
-            // Si se esta en un cool down despues de un ataque, seguir en este modo
-
-            // Si el jugador se va fuera del rango de combate, cambiar al estado de persecucion
         }
 
+        // Gira hacia el jugador de forma suave
         static public void HandleRotateTowardsTarget(EnemyManager enemyManager)
         {
             Vector3 direction = enemyManager.currentTarget.transform.position - enemyManager.transform.position;
@@ -118,12 +125,11 @@ namespace NX
                 direction = enemyManager.transform.forward;
 
             Quaternion targetRotation = Quaternion.LookRotation(direction);
-            //enemyManager.transform.rotation = Quaternion.Slerp(enemyManager.transform.rotation, targetRotation, (enemyManager.rotationSpeed * .005f) / Time.deltaTime);
             enemyManager.transform.rotation = Quaternion.Slerp
                 (enemyManager.transform.rotation, targetRotation, 3 * Time.deltaTime);
         }
 
-
+        // Diferentes tipos de acercarse al jugador
         struct CombatWalkingType
         {
             public float verticalMovementValue;
@@ -141,13 +147,18 @@ namespace NX
 
         private void Awake()
         {
+            // Se configuran los 3 tipos diferentes de acercarse al jugador
             combatWalkingTypes = new CombatWalkingType[3];
 
-            combatWalkingTypes[0] = new CombatWalkingType(0, 1);
+            // Andar hacia la derecha
+            combatWalkingTypes[0] = new CombatWalkingType(0, .5f);
+            // Andar hacia la izquierda
             combatWalkingTypes[1] = new CombatWalkingType(0, -.5f);
+            // Andar hacia el frente
             combatWalkingTypes[2] = new CombatWalkingType(.6f, 0);
         }
 
+        // Decide la forma de acercarse al enemigo aleatoriamente
         private void DecideCirclingAction(EnemyAnimatorHandler enemyAnimatorHandler)
         {
             // No elegir el mismo tipo de andar dos veces seguidas
@@ -162,19 +173,7 @@ namespace NX
             horizontalMovementValue = randomWalkType.horizontalMovementValue;
         }
 
-        private void WalkBack(EnemyAnimatorHandler enemyAnimatorHandler)
-        {
-            verticalMovementValue = -0.4f;
-
-            horizontalMovementValue = 0;
-        }
-
-        private void WalkFront(EnemyAnimatorHandler enemyAnimatorHandler)
-        {
-            verticalMovementValue = 0.4f;
-            horizontalMovementValue = 0;
-        }
-
+        // Elegir un nuevo ataque, que este dentro del rango, en un angulo permitido de forma aleatoria
         private void GetNewAttack(EnemyManager enemyManager)
         {
             Vector3 targetsDirection = enemyManager.currentTarget.transform.position - transform.position;
@@ -183,6 +182,7 @@ namespace NX
 
             int maxScore = 0;
 
+            // Todos los ataques permitidos suman su probabilidad de salir elegidos
             for (int i = 0; i < enemyAttacks.Length; i++)
             {
                 EnemyAttackAction enemyAttackAction = enemyAttacks[i];
@@ -204,6 +204,7 @@ namespace NX
             int randomValue = Random.Range(0, maxScore);
             int temporaryScore = 0;
 
+            // Se elige un ataque de esos teniendo en cuenta la probabilidad de cada uno
             for (int i = 0; i < enemyAttacks.Length; i++)
             {
                 EnemyAttackAction enemyAttackAction = enemyAttacks[i];
