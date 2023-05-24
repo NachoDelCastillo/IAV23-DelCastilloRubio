@@ -2,8 +2,10 @@
 
 ## FLAME SOULS
 <td><img src="https://github.com/NachoDelCastillo/IAV23-DelCastilloRubio/blob/main/ReadmeImages/Portada.PNG" /></td>
+## AUTOR
+- [Ignacio del Castillo](https://github.com/NachoDelCastillo)
 
-## IMPORTANTE
+## PROGRESO
 En esta practica se empleara hasta el ultimo dia permitido para terminar y pulir la practica.
 
 Estado del juego en el dia viernes 25 de mayo de 2023 / Video explicatorio:
@@ -16,9 +18,6 @@ Estado del juego en el dia viernes 19 de mayo de 2023:
 Aqui hay un breve video mostrando las funcionalidades basicas que hay por el momento (tarda un poco en cargarse)
 <td><img src="https://github.com/NachoDelCastillo/IAV23-DelCastilloRubio/blob/main/ReadmeImages/EstadoProyecto.gif" /></td>
 
-
-## AUTOR
-- [Ignacio del Castillo](https://github.com/NachoDelCastillo)
 
 ## PROPUESTA
 
