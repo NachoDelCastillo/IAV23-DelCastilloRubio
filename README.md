@@ -88,18 +88,19 @@ Tambien es el encargado de gestionar el funcionamiento y transicion de estados d
 
 Para gestionar los estados, estos mismos heredan de la clase **State**, la cual solo tiene el metodo Tick, el cual se llamara desde la maquina de estados del enemyManager dependiendo del estado actual del Jefe.</br>
 En este metodo "Tick" se añade la funcionalidad particular de cada estado, en la cual se puede cambiar de estado facilmente usando el "return" con un estado distinto, o usando "return this" si se quiere permanecer en el mismo estado.
+```
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
-    using System.Collections;
-    using System.Collections.Generic;
-    using UnityEngine;
-    
-    namespace NX
+namespace NX
+{
+    public abstract class State : MonoBehaviour
     {
-        public abstract class State : MonoBehaviour
-        {
-            public abstract State Tick(EnemyManager enemyManager, EnemyStats enemyStats, EnemyAnimatorHandler enemyAnimatorHandler);
-        }
+        public abstract State Tick(EnemyManager enemyManager, EnemyStats enemyStats, EnemyAnimatorHandler enemyAnimatorHandler);
     }
+}
+```
 
 Para la maquina de estados del enemigo se utilizan los siguientes estados:
 
@@ -110,48 +111,48 @@ con el parametro "sleepAnimation", cuando el jugador se acerca a menos de "detec
 de distancia, el estado cambia al estado "PursueTargetState" en el que se perseguira al jugador.
 
 ```
-    public class SleepState : State
+public class SleepState : State
+{
+    public PursueState pursueTargetState;
+
+    public bool isSleeping;
+    public float detectionRadius = 2;
+    public string sleepAnimation;
+    public string wakeAnimation;
+
+    public override State Tick(EnemyManager enemyManager, EnemyStats enemyStats, EnemyAnimatorHandler enemyAnimatorHandler)
     {
-        public PursueState pursueTargetState;
-    
-        public bool isSleeping;
-        public float detectionRadius = 2;
-        public string sleepAnimation;
-        public string wakeAnimation;
-    
-        public override State Tick(EnemyManager enemyManager, EnemyStats enemyStats, EnemyAnimatorHandler enemyAnimatorHandler)
+        // Si esta durmiendo, poner la animacion de dormir
+        if (isSleeping && !enemyManager.isInteracting)
+            enemyAnimatorHandler.PlayTargetAnimation(sleepAnimation, true);
+
+        // Comprueba si el jugador esta a menos de la distancia parametrizada
+        #region Detectar al jugador
+
+        Collider[] colliders = Physics.OverlapSphere(enemyManager.transform.position, detectionRadius);
+
+        for (int i = 0; i < colliders.Length; i++)
         {
-            // Si esta durmiendo, poner la animacion de dormir
-            if (isSleeping && !enemyManager.isInteracting)
-                enemyAnimatorHandler.PlayTargetAnimation(sleepAnimation, true);
-    
-            // Comprueba si el jugador esta a menos de la distancia parametrizada
-            #region Detectar al jugador
-    
-            Collider[] colliders = Physics.OverlapSphere(enemyManager.transform.position, detectionRadius);
-    
-            for (int i = 0; i < colliders.Length; i++)
+            PlayerStats playerStats = colliders[i].transform.GetComponent<PlayerStats>();
+
+            if (playerStats != null)
             {
-                PlayerStats playerStats = colliders[i].transform.GetComponent<PlayerStats>();
-    
-                if (playerStats != null)
-                {
-                    Vector3 targetDirection = playerStats.transform.position - enemyManager.transform.position;
-    
-                    //enemyManager.currentTarget = playerStats;
-                    isSleeping = false;
-                    enemyAnimatorHandler.PlayTargetAnimation(wakeAnimation, true);
-    
-                    return pursueTargetState;
-                }
+                Vector3 targetDirection = playerStats.transform.position - enemyManager.transform.position;
+
+                //enemyManager.currentTarget = playerStats;
+                isSleeping = false;
+                enemyAnimatorHandler.PlayTargetAnimation(wakeAnimation, true);
+
+                return pursueTargetState;
             }
-    
-            #endregion
-    
-            // Si no se ha detectado al jugador, seguir en este estado
-            return this;
         }
+
+        #endregion
+
+        // Si no se ha detectado al jugador, seguir en este estado
+        return this;
     }
+}
 ```
     
 </br></br>
@@ -160,64 +161,67 @@ En este estado, la IA hace uso del NavMesh para acercarse al jugador
 Una vez que el enemigo se ha acercado lo suficiente al jugador teniendo en cuenta
 el parametro "enemyManager.maximumAggroRadius", pasa al estado de combate.
 
-    public class PursueState : State
+```
+public class PursueState : State
+{
+    public CombatState combatStanceState;
+    public RotateTowardsTargetState rotateTowardsTargetState;
+
+    public override State Tick(EnemyManager enemyManager, EnemyStats enemyStats, EnemyAnimatorHandler enemyAnimatorHandler)
     {
-        public CombatState combatStanceState;
-        public RotateTowardsTargetState rotateTowardsTargetState;
+        Vector3 targetDirection = enemyManager.currentTarget.transform.position - enemyManager.transform.position;
+        float distanceFromTarget = Vector3.Distance(enemyManager.currentTarget.transform.position, enemyManager.transform.position);
+        float viewableAngle = Vector3.SignedAngle(targetDirection, enemyManager.transform.forward, Vector3.up);
 
-        public override State Tick(EnemyManager enemyManager, EnemyStats enemyStats, EnemyAnimatorHandler enemyAnimatorHandler)
+        // Se encarga de mover al enemigo hacia el jugador, ya sea usando Navmesh o rotacion manual usando matematicas
+        HandleRotateTowardsTarget(enemyManager);
+
+        // Si no esta mirando al jugador, pasar al estado de Rotate para tenerle de frente
+        if (viewableAngle > 65 || viewableAngle < -65)
+            return rotateTowardsTargetState;
+
+
+        if (enemyManager.isPerformingAction)
         {
-            Vector3 targetDirection = enemyManager.currentTarget.transform.position - enemyManager.transform.position;
-            float distanceFromTarget = Vector3.Distance(enemyManager.currentTarget.transform.position, enemyManager.transform.position);
-            float viewableAngle = Vector3.SignedAngle(targetDirection, enemyManager.transform.forward, Vector3.up);
+            enemyAnimatorHandler.anim.SetFloat("Vertical", 0, 0.1f, Time.deltaTime);
 
-            // Se encarga de mover al enemigo hacia el jugador, ya sea usando Navmesh o rotacion manual usando matematicas
-            HandleRotateTowardsTarget(enemyManager);
+            // Si se esta en medio de un ataque y se permite rotar en el ataque
+            if (enemyManager.canRotate)
+                CombatState.HandleRotateTowardsTarget(enemyManager);
 
-            // Si no esta mirando al jugador, pasar al estado de Rotate para tenerle de frente
-            if (viewableAngle > 65 || viewableAngle < -65)
-                return rotateTowardsTargetState;
-
-
-            if (enemyManager.isPerformingAction)
-            {
-                enemyAnimatorHandler.anim.SetFloat("Vertical", 0, 0.1f, Time.deltaTime);
-
-                // Si se esta en medio de un ataque y se permite rotar en el ataque
-                if (enemyManager.canRotate)
-                    CombatState.HandleRotateTowardsTarget(enemyManager);
-
-                return this;
-            }
-
-
-            if (distanceFromTarget > enemyManager.maximumAggroRadius)
-                enemyAnimatorHandler.anim.SetFloat("Vertical", 1, 0.1f, Time.deltaTime);
-
-            enemyManager.navMeshAgent.transform.localPosition = Vector3.zero;
-            enemyManager.navMeshAgent.transform.localRotation = Quaternion.identity;
-
-
-            // Si esta en rango de combate, cambiar a estado de combate
-            if (distanceFromTarget <= enemyManager.maximumAggroRadius)
-                return combatStanceState;
-            // Si no esta en rango de combate, seguir persiguiendo
-            else
-                return this;
+            return this;
         }
 
-        // Rotar usando navmesh, o manualmente
-        public void HandleRotateTowardsTarget(EnemyManager enemyManager)
-        {
-            // Seguir al jugador usando navmesh
-            Vector3 relativeDirection = enemyManager.transform.InverseTransformDirection(enemyManager.navMeshAgent.desiredVelocity);
-            Vector3 targetVelocity = enemyManager.enemyRigidbody.velocity;
-            enemyManager.navMeshAgent.enabled = true;
-            enemyManager.navMeshAgent.SetDestination(enemyManager.currentTarget.transform.position);
-            enemyManager.enemyRigidbody.velocity = targetVelocity;
-            enemyManager.transform.rotation = Quaternion.Slerp(enemyManager.transform.rotation, enemyManager.navMeshAgent.transform.rotation, enemyManager.rotationSpeed / Time.deltaTime);
-        }
+
+        if (distanceFromTarget > enemyManager.maximumAggroRadius)
+            enemyAnimatorHandler.anim.SetFloat("Vertical", 1, 0.1f, Time.deltaTime);
+
+        enemyManager.navMeshAgent.transform.localPosition = Vector3.zero;
+        enemyManager.navMeshAgent.transform.localRotation = Quaternion.identity;
+
+
+        // Si esta en rango de combate, cambiar a estado de combate
+        if (distanceFromTarget <= enemyManager.maximumAggroRadius)
+            return combatStanceState;
+        // Si no esta en rango de combate, seguir persiguiendo
+        else
+            return this;
     }
+
+    // Rotar usando navmesh, o manualmente
+    public void HandleRotateTowardsTarget(EnemyManager enemyManager)
+    {
+        // Seguir al jugador usando navmesh
+        Vector3 relativeDirection = enemyManager.transform.InverseTransformDirection(enemyManager.navMeshAgent.desiredVelocity);
+        Vector3 targetVelocity = enemyManager.enemyRigidbody.velocity;
+        enemyManager.navMeshAgent.enabled = true;
+        enemyManager.navMeshAgent.SetDestination(enemyManager.currentTarget.transform.position);
+        enemyManager.enemyRigidbody.velocity = targetVelocity;
+        enemyManager.transform.rotation = Quaternion.Slerp(enemyManager.transform.rotation, enemyManager.navMeshAgent.transform.rotation, enemyManager.rotationSpeed / Time.deltaTime);
+    }
+}
+```
+
 
 - ****CombatState :**** </br>
 Comprueba si el jugador ha muerto, en dicho caso, asigna la animacion correspondiente y pasa al estado Idle
@@ -235,53 +239,338 @@ En este estado, el enemigo decide de que forma acercarse al jugador dependiendo
 de la variable "combatWalkingTypes", facilmente modificable.
 
 
+```
+public class CombatState : State
+{
+    public IdleState idleState;
+    public AttackState attackState;
+    public PursueState pursueTargetState;
+
+    public EnemyAttackAction[] enemyAttacks;
+
+    float rotationSpeed;
+
+    // Velocidad a la que rota normalmente
+    float normalRotationSpeed = 5;
+    // Velocidad a la que rota mientras ataca
+    float attackingRotationSpeed = 3;
+
+    // Caminar de una de las formas designadas en el modo combate
+    bool randomDestinationSet = false;
+    float verticalMovementValue = 0;
+    float horizontalMovementValue = 0;
+
+    float randomMovementTimer = 0;
+    float maxMovementTime = 6;
+    float minMovementTime = 3;
+
+    string lastAttackName = "";
+
+    public override State Tick(EnemyManager enemyManager, EnemyStats enemyStats, EnemyAnimatorHandler enemyAnimatorHandler)
+    {
+        // Comprobar si el jugador ha muerto, en dicho caso, asigna la animacion correspondiente y pasa al estado Idle
+        if (enemyManager.currentTarget.GetComponent<PlayerStats>().isDead)
+        {
+            enemyAnimatorHandler.PlayTargetAnimation("EnemyVictory", true);
+            return idleState;
+        }
+
+        // Distancia hasta el jugador
+        float distanceFromTarget = Vector3.Distance(enemyManager.currentTarget.transform.position, enemyManager.transform.position);
+
+        // Mover el enemigo mediante los parametros de las animaciones
+        enemyAnimatorHandler.anim.SetFloat("Vertical", verticalMovementValue, 0.2f, Time.deltaTime);
+        enemyAnimatorHandler.anim.SetFloat("Horizontal", horizontalMovementValue, 0.2f, Time.deltaTime);
+
+        // Si se esta de vuelta en este estado, significa que el ataque que se estaba ejecutando ha terminado
+        attackState.hasPerformedAttack = false;
+
+        // Si se esta realizando alguna accion, no permitir moverse
+        if (enemyManager.isInteracting)
+        {
+            enemyAnimatorHandler.anim.SetFloat("Vertical", 0);
+            enemyAnimatorHandler.anim.SetFloat("Horizontal", 0);
+            return this;
+        }
+
+        // Si el jugador se va fuera del rango de combate, cambiar al estado de persecucion
+        else if (distanceFromTarget > enemyManager.maximumAggroRadius)
+            return pursueTargetState;
+
+
+        // Acercarse al enemigo permutando entre diferentes formas de caminar
+        if (!randomDestinationSet)
+        {
+            randomDestinationSet = true;
+            // Decicir la forma de acercarse al enemigo aleatoriamente
+            DecideCirclingAction(enemyAnimatorHandler);
+
+            // Decidir dentro de cuanto tiempo se cambiara este estilo de andar
+            randomMovementTimer = Random.Range(minMovementTime, maxMovementTime);
+        }
+        else
+        {
+            // Si se tiene una destination asignada cambiarla dentro de X segundos
+            randomMovementTimer -= Time.deltaTime;
+
+            if (randomMovementTimer <= 0)
+            {
+                randomMovementTimer = 0;
+                // Desvincular el movimiento anterior para que se decida uno nuevo
+                randomDestinationSet = false;
+            }
+        }
+
+        // Mirar constantemente al jugador
+        HandleRotateTowardsTarget(enemyManager);
+
+        // Si se ha elegido un ataque para realizar, pasar al estado de ataque
+        // Si se esta en un cool down despues de un ataque, seguir en este modo
+        if (enemyManager.currentRecoveryTime <= 0 && attackState.currentAttack != null)
+        {
+            randomDestinationSet = false;
+            return attackState;
+        }
+        else
+            // Elegir un nuevo ataque
+            GetNewAttack(enemyManager);
+
+        return this;
+    }
+
+    // Gira hacia el jugador de forma suave
+    static public void HandleRotateTowardsTarget(EnemyManager enemyManager)
+    {
+        Vector3 direction = enemyManager.currentTarget.transform.position - enemyManager.transform.position;
+        direction.y = 0;
+        direction.Normalize();
+
+        if (direction == Vector3.zero)
+            direction = enemyManager.transform.forward;
+
+        Quaternion targetRotation = Quaternion.LookRotation(direction);
+        enemyManager.transform.rotation = Quaternion.Slerp
+            (enemyManager.transform.rotation, targetRotation, 3 * Time.deltaTime);
+    }
+
+    // Diferentes tipos de acercarse al jugador
+    struct CombatWalkingType
+    {
+        public float verticalMovementValue;
+        public float horizontalMovementValue;
+
+        public CombatWalkingType(float _verticalMovementValue, float _horizontalMovementValue)
+        {
+            verticalMovementValue = _verticalMovementValue;
+            horizontalMovementValue = _horizontalMovementValue;
+        }
+    }
+
+    CombatWalkingType[] combatWalkingTypes;
+    int currentWalkTypeIndex = 0;
+
+    private void Awake()
+    {
+        // Se configuran los 3 tipos diferentes de acercarse al jugador
+        combatWalkingTypes = new CombatWalkingType[3];
+
+        // Andar hacia la derecha
+        combatWalkingTypes[0] = new CombatWalkingType(0, .5f);
+        // Andar hacia la izquierda
+        combatWalkingTypes[1] = new CombatWalkingType(0, -.5f);
+        // Andar hacia el frente
+        combatWalkingTypes[2] = new CombatWalkingType(.6f, 0);
+    }
+
+    // Decide la forma de acercarse al enemigo aleatoriamente
+    private void DecideCirclingAction(EnemyAnimatorHandler enemyAnimatorHandler)
+    {
+        // No elegir el mismo tipo de andar dos veces seguidas
+        int randomNewWalkType = currentWalkTypeIndex;
+        while (randomNewWalkType == currentWalkTypeIndex)
+            randomNewWalkType = Random.Range(0, combatWalkingTypes.Length);
+        currentWalkTypeIndex = randomNewWalkType;
+
+        // Settear los valores que determinan el movimiento en el enemigo
+        CombatWalkingType randomWalkType = combatWalkingTypes[currentWalkTypeIndex];
+        verticalMovementValue = randomWalkType.verticalMovementValue;
+        horizontalMovementValue = randomWalkType.horizontalMovementValue;
+    }
+
+    // Elegir un nuevo ataque, que este dentro del rango, en un angulo permitido de forma aleatoria
+    private void GetNewAttack(EnemyManager enemyManager)
+    {
+        Vector3 targetsDirection = enemyManager.currentTarget.transform.position - transform.position;
+        float viewableAngle = Vector3.Angle(targetsDirection, transform.forward);
+        float distanceFromTarget = Vector3.Distance(enemyManager.currentTarget.transform.position, enemyManager.transform.position);
+
+        int maxScore = 0;
+
+        // Todos los ataques permitidos suman su probabilidad de salir elegidos
+        for (int i = 0; i < enemyAttacks.Length; i++)
+        {
+            EnemyAttackAction enemyAttackAction = enemyAttacks[i];
+
+            // Si el ataque seleccionado no puede usarse (angulo no apropiado o distancia)
+            // Si es valido, parar el movimiento y atacar el target (jugador)
+            if (distanceFromTarget <= enemyAttackAction.maximumDistanceNeededToAttack
+                && distanceFromTarget >= enemyAttackAction.minimumDistanceNeededToAttack)
+            {
+                if (viewableAngle <= enemyAttackAction.maximunAttackAngle
+                    && viewableAngle >= enemyAttackAction.minimumAttackAngle)
+                {
+                    if (lastAttackName == enemyAttackAction.name)
+                        continue;
+
+                    maxScore += enemyAttackAction.attackScore;
+                }
+            }
+        }
+
+        int randomValue = Random.Range(0, maxScore);
+        int temporaryScore = 0;
+
+        // Se elige un ataque de esos teniendo en cuenta la probabilidad de cada uno
+        for (int i = 0; i < enemyAttacks.Length; i++)
+        {
+            EnemyAttackAction enemyAttackAction = enemyAttacks[i];
+
+            if (distanceFromTarget <= enemyAttackAction.maximumDistanceNeededToAttack
+                && distanceFromTarget >= enemyAttackAction.minimumDistanceNeededToAttack)
+            {
+                if (viewableAngle <= enemyAttackAction.maximunAttackAngle
+                    && viewableAngle >= enemyAttackAction.minimumAttackAngle)
+                {
+                    if (lastAttackName == enemyAttackAction.name)
+                        continue;
+
+                    if (attackState.currentAttack != null)
+                        return;
+
+                    temporaryScore += enemyAttackAction.attackScore;
+
+                    if (temporaryScore > randomValue)
+                    {
+                        attackState.currentAttack = enemyAttackAction;
+                        lastAttackName = enemyAttackAction.name;
+                    }
+                }
+            }
+        }
+    }
+}
+```
+
 - ****AttackState :**** </br>
 
-       public class AttackState : State
-       {
-           public CombatState combatStanceState;
-           public RotateTowardsTargetState rotateTowardsTargetState;
-           public PursueState pursueTargetState;
-           public EnemyAttackAction currentAttack;
-   
-   
-           bool willDoComboNextAttack = false;
-           public bool hasPerformedAttack = false;
-   
-           public override State Tick(EnemyManager enemyManager, EnemyStats enemyStats, EnemyAnimatorHandler enemyAnimatorHandler)
-           {
-               // Elegir un ataque
-   
-               // Volver al estado de combate
-               float distanceFromTarget = Vector3.Distance(enemyManager.currentTarget.transform.position, enemyManager.transform.position);
-   
-               // Cambia al estado de persecucion si el jugador se aleja demasiado
-               if (distanceFromTarget > enemyManager.maximumAggroRadius)
-                   return pursueTargetState;
-   
-               // Si todavia no se a realizado el ataque elegido en el estado de combate, ejecutarlo
-               if (!hasPerformedAttack)
-                   AttackTarget(enemyAnimatorHandler, enemyManager);
-   
-   
-               // Cuando se haya realizado el ataque, pasar al estado de rotacion hacia el jugador
-               return rotateTowardsTargetState;
-           }
-   
-           // Se encarga de ejecutar las animaciones y actualizar los valores de ataque
-           private void AttackTarget(EnemyAnimatorHandler enemyAnimatorHandler, EnemyManager enemyManager)
-           {
-               enemyAnimatorHandler.PlayTargetAnimation(currentAttack.actionAnimation, true);
-               // Activar el recovery timer para dejar al jugador una oportunidad de atacar despues del ataque
-               enemyManager.currentRecoveryTime = currentAttack.recoveryTime;
-               // Actualizar las variables
-               hasPerformedAttack = true;
-               currentAttack = null; //////
-           }
-       }
+Este estado se encarga de ejecutar el ataque elegido en el estado de combate, una vez que se ha ejecutado el ataque
+exitosamente, se pasa al estado de RotateTowardsTarget
+Tambien se encarga de gestionar y resetear las variables necesarias despues de realizar un ataque
+como el tiempo de recovery y el ataque actual.
+
+```
+public class AttackState : State
+{
+    public CombatState combatStanceState;
+    public RotateTowardsTargetState rotateTowardsTargetState;
+    public PursueState pursueTargetState;
+    public EnemyAttackAction currentAttack;
+
+
+    bool willDoComboNextAttack = false;
+    public bool hasPerformedAttack = false;
+
+    public override State Tick(EnemyManager enemyManager, EnemyStats enemyStats, EnemyAnimatorHandler enemyAnimatorHandler)
+    {
+        // Elegir un ataque
+
+        // Volver al estado de combate
+        float distanceFromTarget = Vector3.Distance(enemyManager.currentTarget.transform.position, enemyManager.transform.position);
+
+        // Cambia al estado de persecucion si el jugador se aleja demasiado
+        if (distanceFromTarget > enemyManager.maximumAggroRadius)
+            return pursueTargetState;
+
+        // Si todavia no se a realizado el ataque elegido en el estado de combate, ejecutarlo
+        if (!hasPerformedAttack)
+            AttackTarget(enemyAnimatorHandler, enemyManager);
+
+
+        // Cuando se haya realizado el ataque, pasar al estado de rotacion hacia el jugador
+        return rotateTowardsTargetState;
+    }
+
+    // Se encarga de ejecutar las animaciones y actualizar los valores de ataque
+    private void AttackTarget(EnemyAnimatorHandler enemyAnimatorHandler, EnemyManager enemyManager)
+    {
+        enemyAnimatorHandler.PlayTargetAnimation(currentAttack.actionAnimation, true);
+        // Activar el recovery timer para dejar al jugador una oportunidad de atacar despues del ataque
+        enemyManager.currentRecoveryTime = currentAttack.recoveryTime;
+        // Actualizar las variables
+        hasPerformedAttack = true;
+        currentAttack = null; //////
+    }
+}
+```       
 
 - ****RotateTowardsTargetState :**** </br>
 
+Este estado sirve para rotar al jefe de forma suave usando animaciones predefinidas.
+Este metodo se llama justo despues de terminar un ataque, en el que el jefe normalmente
+habra acabado en una rotacion en la que el jugador no esta delante suyo.
+
+Cuando se entra en este estado, se calcula el angulo entre el frente del jefe y el jugador,
+dependiendo del valor, se elegira una de las tres animaciones de girar: 90 grados hacia izquierda/derecha o 180 grados.
+Cuando se ha ejecutado la animacion correcta, se pasara al estado de combate.
+
+```
+ public class RotateTowardsTargetState : State
+{
+    public CombatState combatStanceState;
+
+    public override State Tick(EnemyManager enemyManager, EnemyStats enemyStats, EnemyAnimatorHandler enemyAnimatorHandler)
+    {
+        // Inmovilizar a este enemigo al entrar en este estado
+        enemyAnimatorHandler.anim.SetFloat("Vertical", 0);
+        enemyAnimatorHandler.anim.SetFloat("Horizontal", 0);
+
+        Vector3 targetDirection = enemyManager.currentTarget.transform.position - enemyManager.transform.position;
+        float viewableAngle = Vector3.SignedAngle(targetDirection, enemyManager.transform.forward, Vector3.up);
+
+        // Cuando entremos en este estado, el ultimo ataque seguira en marcha, por lo que tenemos
+        // que esperar a que termine su animacion para poder empezar a girar
+        if (enemyManager.isInteracting)
+            return this;
+
+        // Elegir la animacion mas aproximada para estar mirando directamente al jugador
+        if (!enemyManager.isInteracting)
+        {
+            if (viewableAngle >= 100 && viewableAngle <= 180)
+            {
+                enemyAnimatorHandler.PlayTargetAnimationWithRootRotation("BackTurn", true);
+                return combatStanceState;
+            }
+            else if (viewableAngle <= -101 && viewableAngle >= -180)
+            {
+                enemyAnimatorHandler.PlayTargetAnimationWithRootRotation("BackTurn", true);
+                return combatStanceState;
+            }
+            else if (viewableAngle <= -45 && viewableAngle >= -100)
+            {
+                enemyAnimatorHandler.PlayTargetAnimationWithRootRotation("RightTurn", true);
+                return combatStanceState;
+            }
+            else if (viewableAngle >= 45 && viewableAngle <= 100)
+            {
+                enemyAnimatorHandler.PlayTargetAnimationWithRootRotation("LeftTurn", true);
+                return combatStanceState;
+            }
+        }
+
+        return combatStanceState;
+    }
+}
+```
 
 - ****IdleState :**** </br>
 Estado cuyo unico proposito es que el enemigo no se mueva,
@@ -289,13 +578,15 @@ Este estado se llama cuando el enemigo muere, junto a la animacion de muerte del
 Este estado tambien se llama cuando el jugador muere, donde el enemigo realiza en bucle
 la animacion de victoria hasta que se reinicie la escena.
 
-    public class IdleState : State
+```
+public class IdleState : State
+{
+    public override State Tick(EnemyManager enemyManager, EnemyStats enemyStats, EnemyAnimatorHandler enemyAnimatorHandler)
     {
-        public override State Tick(EnemyManager enemyManager, EnemyStats enemyStats, EnemyAnimatorHandler enemyAnimatorHandler)
-        {
-            return this;
-        }
+        return this;
     }
+}
+```
 
 </br></br>
 ## ACCIONES
