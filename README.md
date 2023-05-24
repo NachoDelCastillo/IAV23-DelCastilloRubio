@@ -8,10 +8,10 @@
 ## PROGRESO
 En esta practica se empleara hasta el ultimo dia permitido para terminar y pulir la practica.
 
-Estado del juego en el dia viernes 25 de mayo de 2023 / Video explicatorio:
+**Estado del juego en el dia viernes 25 de mayo de 2023 / Video explicatorio:**
 
 
-Estado del juego en el dia viernes 19 de mayo de 2023:
+**Estado del juego en el dia viernes 19 de mayo de 2023:**
 - El personaje que controla el jugador completamente terminado, con todas las acciones mencionadas mas abajo.
 - La infraestructura y la interfaz que muestra la salud actual del jugador.
 - Un enemigo con un funcionamiento basico de momento, en el que puede perseguir al jugador y atacarlo. Tambien puede recibir daño.
