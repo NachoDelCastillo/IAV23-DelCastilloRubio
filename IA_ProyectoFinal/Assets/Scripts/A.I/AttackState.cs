@@ -3,6 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace NX {
+
+    // Este estado se encarga de ejecutar el ataque elegido en el estado de combate, una vez que se ha ejecutado el ataque
+    // exitosamente, se pasa al estado de RotateTowardsTarget
+    // Tambien se encarga de gestionar y resetear las variables necesarias despues de realizar un ataque
+    // como el tiempo de recovery y el ataque actual
+
     public class AttackState : State
     {
         public CombatState combatStanceState;
@@ -10,8 +16,6 @@ namespace NX {
         public PursueState pursueTargetState;
         public EnemyAttackAction currentAttack;
 
-
-        bool willDoComboNextAttack = false;
         public bool hasPerformedAttack = false;
 
         public override State Tick(EnemyManager enemyManager, EnemyStats enemyStats, EnemyAnimatorHandler enemyAnimatorHandler)
