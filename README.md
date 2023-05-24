@@ -593,7 +593,28 @@ public class IdleState : State
 
 **JEFE**
 
-(Aun por determinar)
+<img src="https://github.com/NachoDelCastillo/IAV23-DelCastilloRubio/blob/main/ReadmeImages/Acciones.PNG" />
+
+</br>
+<table>
+  <tr>
+    <td><img src="https://github.com/NachoDelCastillo/IAV23-DelCastilloRubio/blob/main/ReadmeImages/Animation01.PNG" /></td>
+    <td><img src="https://github.com/NachoDelCastillo/IAV23-DelCastilloRubio/blob/main/ReadmeImages/Animation02.PNG" /></td>
+  </tr>
+    <tr>
+    <th>Animaciones de acciones</th>
+    <th>BlendTree para combinar las animaciones de caminar/correr</th>
+  </tr>
+  </br>
+    <tr>
+    <td><img src="https://github.com/NachoDelCastillo/IAV23-DelCastilloRubio/blob/main/ReadmeImages/Animation03.PNG" /></td>
+    <td><img src="https://github.com/NachoDelCastillo/IAV23-DelCastilloRubio/blob/main/ReadmeImages/Animation04.PNG" /></td>
+  </tr>
+    <tr>
+    <th>Ejemplo de animacion con sus respectivos eventos</th>
+    <th>Todas las animaciones implementadas</th>
+  </tr>
+</table>
 
 **JUGADOR**
 | **ACCION** | **TECLADO** | **MANDO** | **DESCRIPCION** |
