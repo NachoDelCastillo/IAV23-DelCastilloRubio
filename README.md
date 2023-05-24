@@ -60,9 +60,11 @@ En esta practica mi objetivo es crear una batalla entre el jugador y un Jefe. Pr
 
 </br></br>
 ## DISEÑO
-Para conseguir un comporamiento variado e interesante, hago uso de diferentes niveles de proximidad alrededor del Jefe, el cual tiene en cuenta a que distancia se encuentra del jugador, determinando el area de proximidad en el que se encuentra el jugador respecto al Jefe.
-En cada una de estas areas de proximidad, el Jefe podra elegir su siguiente accion entre un grupo de acciones designadas a esta area de proximidad, cada accion determinada por una probabilidad (facilmente asignable desde el editor).
-Una accion no tiene porque constituir un ataque, tambien incluye otras acciones como reposicionamiento (andar/correr hacia el jugador, retroceder, situarse en el medio del campo de batalla).
+Para conseguir un comporamiento variado e interesante, hago uso de una maquina de estados, la cual tiene en cuenta a que distancia al jugador y cambia su comportamiento en consecuencia.
+En cada uno de estos estados, el jefe se comportara de manera diferente, realizando diferentes acciones y animaciones dependiendo del estado actual.
+Una accion no tiene porque constituir un ataque, tambien incluye otras acciones como saltar lejos para retirarse, variando asi el combate y mejorando el gameplay.
+Estos estados estan definidos en el apartado ESTADOS.
+El enemigo tambien se acercara al jugador de forma variada, cambiando cada pocos segundos su comportamiento, mejor explicado en el apartado de "CombatState".
 
 Dependiendo de en que area de proximidad este el jugador, correra mas riesgo o menos de perder vida. Mas riesgo mientras mas cerca este del enemigo, y menos riesgo mientras mas lejos este.
 Pero como el ataque cuerpo a cuerpo es la unica opcion para el jugador, estara obligado a analizar los movimientos del enemigo y descubrir aperturas para meterse en el area de mayor riesgo y restarle asi vida hasta vencerlo.
