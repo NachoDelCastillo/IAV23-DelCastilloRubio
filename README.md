@@ -640,24 +640,25 @@ En estas acciones se pueden observar diferentes parametros, los cuales se tienen
 
 </br></br>
 ## CREDITOS
-Estos son los recursos externos que he empleado en la creacion de este juego
+Estos son los recursos externos que he empleado en la creacion de este juego.
+Todos ellos tienen licencia comerciable siempre que se les acredite dentro del juego.
 
-</br>
+</br></br>
 SHADERS</br>
 com.unity.toonshader - Unity Technologies
 Stylized bomb effect - Daniel Ilett
 Stylised Grass - Daniel Ilett
 Cartoon Fire - A Bit Of Game Dev
 
-</br>
+</br></br>
 FONTS</br>
 Edo - Vic Fieger
 
-</br>
+</br></br>
 ANIMATIONS</br>
 All Animations - Mixamo
 
-</br>
+</br></br>
 3D MODELS</br>
 Golem - Tink
 Spirited Away Chihiro - Jade L
@@ -668,7 +669,7 @@ Dungeon Pillar - ekaterina krasnova
 Rune Stone - Danciu Cristian-Alexa
 Stylized Skull - Max Doroszewski
 
-</br>
+</br></br>
 SKYBOX</br>
 Fantasy Skybox - Render Knight
 
