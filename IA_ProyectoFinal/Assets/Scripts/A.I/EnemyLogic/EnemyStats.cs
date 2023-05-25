@@ -7,6 +7,9 @@ namespace NX
 {
     public class EnemyStats : CharacterStats
     {
+        EnemyManager enemyManager;
+        Animator anim;
+
         [SerializeField]
         Image fill;
 
@@ -16,10 +19,10 @@ namespace NX
         [SerializeField]
         ParticleSystem flameHeart;
 
-        Animator anim;
 
         private void Awake()
         {
+            enemyManager = GetComponent<EnemyManager>();
             anim = GetComponentInChildren<Animator>();
         }
 
@@ -63,6 +66,9 @@ namespace NX
                 ParticleManager.GetInstance().Play("SparksAndLines_Orange", transform.position + particleOffset);
 
                 StartCoroutine(FlameStop());
+
+                enemyManager.SwitchToNextState(FindObjectOfType<IdleState>());
+                enemyManager.canRotate = false;
             }
         }
 

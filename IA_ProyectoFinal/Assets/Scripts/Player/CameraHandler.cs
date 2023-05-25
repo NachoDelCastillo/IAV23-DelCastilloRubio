@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Net.Http.Headers;
+using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
 using UnityEngine.TextCore.Text;
 
@@ -84,8 +85,9 @@ namespace NX
                 if (currentLockOnTarget == null)
                     CameraControl_Manual(delta, mouseXInput, mouseYInput);
 
-                else
+                else if (!lerpingCameraToTarget)
                 {
+                    //return;
                     float velocity = 0;
 
                     Vector3 trueLockOnTargetPosition = currentLockOnTarget.transform.position + new Vector3(0, 4, 0);
@@ -103,10 +105,77 @@ namespace NX
                     targetRotation = Quaternion.LookRotation(dir);
                     Vector3 eulerAngle = targetRotation.eulerAngles;
                     eulerAngle.y = 0;
-                    cameraPivotTransform.localEulerAngles = eulerAngle;
+                    //cameraPivotTransform.localEulerAngles = eulerAngle;
+
+                    cameraPivotTransform.rotation = targetRotation;
+
+                    SetCameraHeight();
                 }
             }
         }
+
+        bool lerpingCameraToTarget = false;
+        IEnumerator LerpCameraToTarget()
+        {
+            float duration = 1;
+            lerpingCameraToTarget = true;
+
+
+            // Determinar variables necesarias para la transicion
+            Quaternion initialRotation = transform.rotation;
+            Quaternion initialPivotRotation = cameraPivotTransform.rotation;
+
+            // Determinar variables necesarias para la transicion
+            Quaternion targetRotation = LookToTargetRotation();
+            Quaternion tagetPivotRotation = LookToTargetRotation();
+
+            float currentSecond = 0;
+            while (currentSecond <= duration + .1f)
+            {
+                currentSecond += Time.deltaTime;
+                float t = currentSecond / duration;
+
+                Debug.Log("LERPER = " + t);
+
+                targetRotation = LookToTargetRotation();
+                transform.rotation = Quaternion.Slerp(initialRotation, targetRotation, t);
+
+                tagetPivotRotation = LookToTargetRotation();
+                cameraPivotTransform.rotation = Quaternion.Slerp(initialPivotRotation, targetRotation, t);
+
+
+                SetCameraHeight();
+
+                yield return 0;
+            }
+
+            lerpingCameraToTarget = false;
+        }
+
+        Vector3 lockOnOffset = new Vector3(0, 4, 0);
+        Quaternion LookToTargetRotation()
+        {
+            if (currentLockOnTarget == null) return Quaternion.identity;
+
+            Vector3 trueLockOnTargetPosition = currentLockOnTarget.transform.position + new Vector3(0, 4, 0);
+            Vector3 dir = trueLockOnTargetPosition - transform.position;
+            dir.Normalize();
+            dir.y = 0;
+            Quaternion targetRotation = Quaternion.LookRotation(dir);
+            return targetRotation;
+        }
+
+        //float LookToTargetPivotEulerAngle_Pitch()
+        //{
+        //    Vector3 trueLockOnTargetPosition = currentLockOnTarget.transform.position + lockOnOffset;
+        //    Vector3 dir = trueLockOnTargetPosition - cameraPivotTransform.position;
+        //    dir.Normalize();
+
+        //    Quaternion targetRotation = Quaternion.LookRotation(dir);
+        //    Vector3 eulerAngle = targetRotation.eulerAngles;
+        //    eulerAngle.y = 0;
+        //    return eulerAngle;
+        //}
 
         void CameraControl_Manual(float delta, float mouseXInput, float mouseYInput)
         {
@@ -125,7 +194,6 @@ namespace NX
             targetRotation = Quaternion.Euler(rotation);
             cameraPivotTransform.localRotation = targetRotation;
         }
-
 
         private void HandleCameraCollision(float delta)
         {
@@ -151,83 +219,87 @@ namespace NX
 
         public void HandleLockOn()
         {
-            availableTargets.Clear();
+            // Animacion de la camara lockeando el target
+            currentLockOnTarget = FindObjectOfType<EnemyManager>();
+            StartCoroutine(LerpCameraToTarget());
 
-            float shortestDistance = Mathf.Infinity;
-            float shortestDistanceOfLeftTarget = -Mathf.Infinity;
-            float shortestDistanceOfRightTarget = Mathf.Infinity;
+            //availableTargets.Clear();
 
-
-            Collider[] colliders = Physics.OverlapSphere(targetTransform.position, 26);
-
-            for (int i = 0; i < colliders.Length; i++)
-            {
-                CharacterManager character = colliders[i].GetComponent<CharacterManager>();
-
-                if (character != null)
-                {
-                    Vector3 lockTargetDirection = character.transform.position - targetTransform.position;
-                    float distanceFromTarget = Vector3.Distance(targetTransform.position, character.transform.position);
-                    float viewableAngle = Vector3.Angle(lockTargetDirection, cameraTransform.forward);
-
-                    RaycastHit hit;
-
-                    if (character.transform.root != targetTransform.transform.root
-                        && viewableAngle > -50 && viewableAngle < 50 && distanceFromTarget <= maxLockOnDistance)
-                    {
-                        if (Physics.Linecast(playerManager.lockOnTransform.position, character.lockOnTransform.position, out hit))
-                        {
-                            Debug.DrawLine(playerManager.lockOnTransform.position, character.lockOnTransform.position);
-
-                            if (hit.transform.gameObject.layer == environmentLayer)
-                            {
-                                // No se puede Lockear porque hay algo en medio
-                            }
-                            else
-                                availableTargets.Add(character);
-                        }
-                    }
-                }
-            }
-
-            for (int k = 0; k < availableTargets.Count; k++)
-            {
-                float distanceFromTarget = Vector3.Distance
-                    (targetTransform.position, availableTargets[k].transform.position);
-
-                if (distanceFromTarget < shortestDistance)
-                {
-                    shortestDistance = distanceFromTarget;
-
-                    nearestLockOnTarget = availableTargets[k];
-                }
+            //float shortestDistance = Mathf.Infinity;
+            //float shortestDistanceOfLeftTarget = -Mathf.Infinity;
+            //float shortestDistanceOfRightTarget = Mathf.Infinity;
 
 
-                if (inputHandler.lockOnFlag && currentLockOnTarget)
-                {
-                    //Vector3 relativeEnemyPosition = currentLockOnTarget.transform.InverseTransformPoint(availableTargets[k].transform.position);
-                    //var distanceFromLeftTarget = currentLockOnTarget.transform.position.x - availableTargets[k].transform.position.x;
-                    //var distanceFromRightTarget = currentLockOnTarget.transform.position.x + availableTargets[k].transform.position.x;
+            //Collider[] colliders = Physics.OverlapSphere(targetTransform.position, 26);
 
-                    Vector3 relativeEnemyPosition = inputHandler.transform.InverseTransformPoint(availableTargets[k].transform.position);
-                    var distanceFromLeftTarget = relativeEnemyPosition.x;
-                    var distanceFromRightTarget = relativeEnemyPosition.x;
+            //for (int i = 0; i < colliders.Length; i++)
+            //{
+            //    CharacterManager character = colliders[i].GetComponent<CharacterManager>();
 
-                    if (relativeEnemyPosition.x <= 0.00 && distanceFromLeftTarget > shortestDistanceOfLeftTarget 
-                         && availableTargets[k] != currentLockOnTarget)
-                    {
-                        shortestDistanceOfLeftTarget = distanceFromLeftTarget;
-                        leftLockTarget = availableTargets[k];
-                    }
+            //    if (character != null)
+            //    {
+            //        Vector3 lockTargetDirection = character.transform.position - targetTransform.position;
+            //        float distanceFromTarget = Vector3.Distance(targetTransform.position, character.transform.position);
+            //        float viewableAngle = Vector3.Angle(lockTargetDirection, cameraTransform.forward);
 
-                    else if (relativeEnemyPosition.x >= 0.00 && distanceFromRightTarget < shortestDistanceOfRightTarget
-                        && availableTargets[k] != currentLockOnTarget)
-                    {
-                        shortestDistanceOfRightTarget = distanceFromRightTarget;
-                        rightLockTarget = availableTargets[k];
-                    }
-                }
-            }
+            //        RaycastHit hit;
+
+            //        if (character.transform.root != targetTransform.transform.root
+            //            && viewableAngle > -50 && viewableAngle < 50 && distanceFromTarget <= maxLockOnDistance)
+            //        {
+            //            if (Physics.Linecast(playerManager.lockOnTransform.position, character.lockOnTransform.position, out hit))
+            //            {
+            //                Debug.DrawLine(playerManager.lockOnTransform.position, character.lockOnTransform.position);
+
+            //                if (hit.transform.gameObject.layer == environmentLayer)
+            //                {
+            //                    // No se puede Lockear porque hay algo en medio
+            //                }
+            //                else
+            //                    availableTargets.Add(character);
+            //            }
+            //        }
+            //    }
+            //}
+
+            //for (int k = 0; k < availableTargets.Count; k++)
+            //{
+            //    float distanceFromTarget = Vector3.Distance
+            //        (targetTransform.position, availableTargets[k].transform.position);
+
+            //    if (distanceFromTarget < shortestDistance)
+            //    {
+            //        shortestDistance = distanceFromTarget;
+
+            //        nearestLockOnTarget = availableTargets[k];
+            //    }
+
+
+            //    if (inputHandler.lockOnFlag && currentLockOnTarget)
+            //    {
+            //        //Vector3 relativeEnemyPosition = currentLockOnTarget.transform.InverseTransformPoint(availableTargets[k].transform.position);
+            //        //var distanceFromLeftTarget = currentLockOnTarget.transform.position.x - availableTargets[k].transform.position.x;
+            //        //var distanceFromRightTarget = currentLockOnTarget.transform.position.x + availableTargets[k].transform.position.x;
+
+            //        Vector3 relativeEnemyPosition = inputHandler.transform.InverseTransformPoint(availableTargets[k].transform.position);
+            //        var distanceFromLeftTarget = relativeEnemyPosition.x;
+            //        var distanceFromRightTarget = relativeEnemyPosition.x;
+
+            //        if (relativeEnemyPosition.x <= 0.00 && distanceFromLeftTarget > shortestDistanceOfLeftTarget 
+            //             && availableTargets[k] != currentLockOnTarget)
+            //        {
+            //            shortestDistanceOfLeftTarget = distanceFromLeftTarget;
+            //            leftLockTarget = availableTargets[k];
+            //        }
+
+            //        else if (relativeEnemyPosition.x >= 0.00 && distanceFromRightTarget < shortestDistanceOfRightTarget
+            //            && availableTargets[k] != currentLockOnTarget)
+            //        {
+            //            shortestDistanceOfRightTarget = distanceFromRightTarget;
+            //            rightLockTarget = availableTargets[k];
+            //        }
+            //    }
+            //}
 
             //currentLockOnTarget = nearestLockOnTarget;
 
@@ -258,10 +330,18 @@ namespace NX
 
             nearestLockOnTarget = null;
             currentLockOnTarget = null;
+
+            //Vector3 direction = transform.position - targetTransform.position;
+            //Vector3.Angle(Vector3.left);
+
+            pivotAngle = cameraPivotTransform.localRotation.eulerAngles.x;
+            lookAngle = transform.localRotation.eulerAngles.y;
+            Debug.Log("pivotAngle = " + lookAngle);
         }
 
         public void SetCameraHeight()
         {
+            
             Vector3 velocity = Vector3.zero;
 
             Vector3 newLockedPosition = new Vector3(0, lockedPivotPosition);

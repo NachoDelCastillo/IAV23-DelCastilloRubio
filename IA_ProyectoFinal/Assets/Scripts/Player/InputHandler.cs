@@ -159,23 +159,24 @@ namespace NX
                 cameraHandler.ClearLockOnTargets();
             }
 
-            if (lockOnFlag && rightStick_left_input)
-            {
-                rightStick_left_input= false;
-                cameraHandler.HandleLockOn();
-                if (cameraHandler.leftLockTarget != null)
-                    cameraHandler.currentLockOnTarget = cameraHandler.leftLockTarget;
-            }
+            // Cambiar de target
+            //if (lockOnFlag && rightStick_left_input)
+            //{
+            //    rightStick_left_input= false;
+            //    cameraHandler.HandleLockOn();
+            //    if (cameraHandler.leftLockTarget != null)
+            //        cameraHandler.currentLockOnTarget = cameraHandler.leftLockTarget;
+            //}
 
-            if (lockOnFlag && rightStick_right_input)
-            {
-                rightStick_right_input = false;
-                cameraHandler.HandleLockOn();
-                if (cameraHandler.rightLockTarget != null)
-                    cameraHandler.currentLockOnTarget = cameraHandler.rightLockTarget;
-            }
+            //if (lockOnFlag && rightStick_right_input)
+            //{
+            //    rightStick_right_input = false;
+            //    cameraHandler.HandleLockOn();
+            //    if (cameraHandler.rightLockTarget != null)
+            //        cameraHandler.currentLockOnTarget = cameraHandler.rightLockTarget;
+            //}
 
-            cameraHandler.SetCameraHeight();
+            //cameraHandler.SetCameraHeight();
         }
     }
 }
