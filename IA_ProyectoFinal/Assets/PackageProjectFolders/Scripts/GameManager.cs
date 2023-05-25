@@ -69,9 +69,9 @@ public class GameManager : MonoBehaviour
         icon.rectTransform.anchoredPosition = new Vector2(0, 500);
         icon.rectTransform.DOAnchorPosY(0, transitionDuration)
             .SetUpdate(true).SetEase(Ease.OutCirc);
-        icon.transform.DORotate(new Vector3(0, 0, 360), transitionDuration, RotateMode.FastBeyond360)
-            .SetUpdate(true).SetEase(Ease.OutBack);
-        //.SetUpdate(true).SetEase(Ease.OutSine);
+        //icon.transform.DORotate(new Vector3(0, 0, 360), transitionDuration, RotateMode.FastBeyond360)
+        //    .SetUpdate(true).SetEase(Ease.OutBack);
+        ///.SetUpdate(true).SetEase(Ease.OutSine);
 
         duringTransition = true;
         yield return new WaitForSecondsRealtime(transitionDuration+.5f);
@@ -81,9 +81,9 @@ public class GameManager : MonoBehaviour
 
         icon.rectTransform.DOAnchorPosY(-500, transitionDuration)
             .SetUpdate(true).SetEase(Ease.InCirc);
-        icon.transform.DORotate(new Vector3(0, 0, 360), transitionDuration, RotateMode.FastBeyond360)
-            .SetUpdate(true).SetEase(Ease.InBack);
-        //.SetUpdate(true).SetEase(Ease.InSine);
+        //icon.transform.DORotate(new Vector3(0, 0, 360), transitionDuration, RotateMode.FastBeyond360)
+        //    .SetUpdate(true).SetEase(Ease.InBack);
+        ///.SetUpdate(true).SetEase(Ease.InSine);
 
         #endregion
 

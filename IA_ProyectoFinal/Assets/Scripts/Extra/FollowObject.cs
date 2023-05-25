@@ -29,6 +29,9 @@ namespace NX
         {
             transform.position = Vector3.Lerp(transform.position, target.position, followSpeed * Time.deltaTime);
 
+            if (rb == null)
+                return;
+
             Vector3 velThisFrame = -rb.velocity;
 
             if (velThisFrame != Vector3.zero)

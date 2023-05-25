@@ -46,14 +46,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sounds:
   - name: MainMenu_Music
-    clip: {fileID: 8300000, guid: cc80d0f48919f4e4fa2182f8950dd916, type: 3}
+    clip: {fileID: 8300000, guid: 3326cad4aca669640ae883990aa0fec7, type: 3}
     volume: 1
     maxVolume: 0.5
     pitch: 1
     music: 1
     source: {fileID: 0}
   - name: Gameplay_Music
-    clip: {fileID: 8300000, guid: d4d100328caea794f90ed4f040a62aef, type: 3}
+    clip: {fileID: 8300000, guid: 3326cad4aca669640ae883990aa0fec7, type: 3}
     volume: 0.25
     maxVolume: 0.25
     pitch: 1
