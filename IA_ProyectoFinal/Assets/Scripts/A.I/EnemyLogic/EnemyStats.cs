@@ -68,7 +68,7 @@ namespace NX
                 StartCoroutine(FlameStop());
 
                 enemyManager.SwitchToNextState(FindObjectOfType<IdleState>());
-                enemyManager.canRotate = false;
+                anim.SetBool("canRotate", false);
             }
         }
 

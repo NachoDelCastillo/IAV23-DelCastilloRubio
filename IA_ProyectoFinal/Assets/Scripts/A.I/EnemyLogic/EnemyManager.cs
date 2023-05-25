@@ -24,20 +24,6 @@ namespace NX
 
         public float currentRecoveryTime = 0;
 
-        [SerializeField]
-        TMP_Text distanceText;
-
-        [SerializeField]
-        TMP_Text angleText;
-
-        [SerializeField]
-        TMP_Text stateText;
-
-        [SerializeField]
-        TMP_Text animationText;
-
-
-
         private void Awake()
         {
             enemyLocomotion = GetComponent<IgnoreCollisions>();
@@ -53,51 +39,14 @@ namespace NX
             enemyRigidbody.isKinematic = false;
         }
 
-        //float distance = Vector3.Distance(currentTarget.transform.position, transform.position);
-        //Debug.Log("DISTANCE = " + distance);
-
-        //    Vector3 targetsDirection = currentTarget.transform.position - transform.position;
-        //float viewableAngle = Vector3.Angle(targetsDirection, transform.forward);
-        //Debug.Log("VIEW ANGLE = " + viewableAngle);
-
         private void Update()
         {
             HandleRecoveryTimer();
             isInteracting = enemyAnimatorHandler.anim.GetBool("isInteracting");
             isRotatingWithRootMotion = enemyAnimatorHandler.anim.GetBool("isRotatingWithRootMotion");
             canRotate = enemyAnimatorHandler.anim.GetBool("canRotate");
-
-
-
-            // IA TEXTS
-            distance = Vector3.Distance(currentTarget.transform.position, transform.position);
-            distanceText.text = "DISTANCE - " + ColorText(((int)distance).ToString());
-
-
-            Vector3 targetsDirection = currentTarget.transform.position - transform.position;
-            viewableAngle = Vector3.Angle(targetsDirection, transform.forward);
-            angleText.text = "ANGLE - " + ColorText(((int)viewableAngle).ToString());
-
-            stateText.text = "STATE - " + ColorText(currentState.gameObject.name);
-
-            string s;
-            if (isInteracting) s = "TRUE";
-            else s = "FALSE";
-            animationText.text = "PERFORMING ACTION - " + ColorText(s);
         }
 
-        string ColorText(string text)
-        { return "<color=#0056FF>" + text + "</color>"; }
-
-
-        float distance;
-        float viewableAngle;
-        private void OnDrawGizmos()
-        {
-            Gizmos.DrawWireSphere(transform.position, distance);
-
-            Gizmos.DrawLine(transform.position, currentTarget.transform.position);
-        }
 
         private void FixedUpdate()
         {
