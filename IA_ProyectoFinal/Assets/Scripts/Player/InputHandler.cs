@@ -139,6 +139,10 @@ namespace NX
 
         private void HandleLockOnInput()
         {
+            // No dejar lockear ni deslockear si se esta moviendo la camara
+            if (cameraHandler.lerpingCameraToTarget)
+                return;
+
             if (lockOn_input && !lockOnFlag)
             {
                 //cameraHandler.ClearLockOnTargets();

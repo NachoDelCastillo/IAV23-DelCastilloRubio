@@ -114,10 +114,11 @@ namespace NX
             }
         }
 
-        bool lerpingCameraToTarget = false;
-        IEnumerator LerpCameraToTarget()
+        [SerializeField]
+        AnimationCurve lerpCurve;
+        public bool lerpingCameraToTarget = false;
+        IEnumerator LerpCameraToTarget(float duration = 1)
         {
-            float duration = 1;
             lerpingCameraToTarget = true;
 
 
@@ -132,16 +133,21 @@ namespace NX
             float currentSecond = 0;
             while (currentSecond <= duration + .1f)
             {
+                if (currentLockOnTarget == null)
+                {
+                    ClearLockOnTargets();
+                    yield break;
+                }
+
                 currentSecond += Time.deltaTime;
                 float t = currentSecond / duration;
-
-                Debug.Log("LERPER = " + t);
+                float curvedT = lerpCurve.Evaluate(t);
 
                 targetRotation = LookToTargetRotation();
-                transform.rotation = Quaternion.Slerp(initialRotation, targetRotation, t);
+                transform.rotation = Quaternion.Slerp(initialRotation, targetRotation, curvedT);
 
                 tagetPivotRotation = LookToTargetRotation();
-                cameraPivotTransform.rotation = Quaternion.Slerp(initialPivotRotation, targetRotation, t);
+                cameraPivotTransform.rotation = Quaternion.Slerp(initialPivotRotation, targetRotation, curvedT);
 
 
                 SetCameraHeight();
@@ -221,7 +227,7 @@ namespace NX
         {
             // Animacion de la camara lockeando el target
             currentLockOnTarget = FindObjectOfType<EnemyManager>();
-            StartCoroutine(LerpCameraToTarget());
+            StartCoroutine(LerpCameraToTarget(.2f));
 
             //availableTargets.Clear();
 
