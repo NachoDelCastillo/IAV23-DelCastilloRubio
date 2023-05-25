@@ -600,7 +600,7 @@ public class IdleState : State
 
 **JEFE**
 
-Para un uso mas sencillo y organizado de la IA, he clasificado todas las posibles acciones como ScriptableObjects facilmente modificables.
+Para un uso mas sencillo y organizado de la IA, he clasificado todas las posibles acciones como ScriptableObjects facilmente modificables.</br>
 <img src="https://github.com/NachoDelCastillo/IAV23-DelCastilloRubio/blob/main/ReadmeImages/Acciones.PNG" />
 En estas acciones se pueden observar diferentes parametros, los cuales se tienen en cuenta desde el estado de combate dependiendo del contexto:
 **ActionAnimation : ** Nombre de la animacion que realiza la accion
@@ -644,6 +644,7 @@ Estos son los recursos externos que he empleado en la creacion de este juego
 
 </br>
 **SHADERS**</br>
+
 com.unity.toonshader - Unity Technologies
 Stylized bomb effect - Daniel Ilett
 Stylised Grass - Daniel Ilett
@@ -651,14 +652,17 @@ Cartoon Fire - A Bit Of Game Dev
 
 </br>
 **FONTS**</br>
+
 Edo - Vic Fieger
 
 </br>
 **ANIMATIONS**</br>
+
 All Animations - Mixamo
 
 </br>
 **3D MODELS**</br>
+
 Golem - Tink
 Spirited Away Chihiro - Jade L
 Stylized Sword - a_wilczek
@@ -670,6 +674,7 @@ Stylized Skull - Max Doroszewski
 
 </br>
 **SKYBOX**
+
 Fantasy Skybox - Render Knight
 
 <!--
