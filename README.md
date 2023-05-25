@@ -638,6 +638,40 @@ En estas acciones se pueden observar diferentes parametros, los cuales se tienen
 | Ataque ligero | Click Izquierdo | Right Shoulder (R1) | Realiza una animacion de atacar con la espada rapida realizando poco daño |
 | Ataque pesado | Click Derecho | Right Trigger (R2) | Realiza una animacion de atacar con la espada lenta realizando mucho daño |
 
+</br></br>
+## CREDITOS
+Estos son los recursos externos que he empleado en la creacion de este juego
+
+</br>
+**SHADERS**
+com.unity.toonshader - Unity Technologies
+Stylized bomb effect - Daniel Ilett
+Stylised Grass - Daniel Ilett
+Cartoon Fire - A Bit Of Game Dev
+
+</br>
+**FONTS**
+Edo - Vic Fieger
+
+</br>
+**ANIMATIONS**
+All Animations - Mixamo
+
+</br>
+**3D MODELS**
+Golem - Tink
+Spirited Away Chihiro - Jade L
+Stylized Sword - a_wilczek
+Low Poly Stone Sword - Parelaxel
+samurai Sask - ekaterina krasnova
+Dungeon Pillar - ekaterina krasnova
+Rune Stone - Danciu Cristian-Alexa
+Stylized Skull - Max Doroszewski
+
+</br>
+**SKYBOX**
+Fantasy Skybox - Render Knight
+
 <!--
  **PRUEBA**
 - PRUEBA : Prueba.
