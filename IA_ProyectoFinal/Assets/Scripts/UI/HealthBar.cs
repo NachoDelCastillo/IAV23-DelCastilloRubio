@@ -33,7 +33,7 @@ namespace NX
 
                 healthImages[i] = newImage.AddComponent<Image>();
 
-                newImage.GetComponent<Image>().color = new Color(0, 0, 0, 0);
+                newImage.GetComponent<Image>().color = new Color(1, 1, 1, 1);
             }
 
             SetCurrentHealth(maxHealth);
