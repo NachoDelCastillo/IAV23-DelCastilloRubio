@@ -1,6 +1,6 @@
 # IAV23-DelCastilloRubio
 
-## FLAME SOULS
+## FLAME DEMONS
 <td><img src="https://github.com/NachoDelCastillo/IAV23-DelCastilloRubio/blob/main/ReadmeImages/Portada.PNG" /></td>
 
 ## AUTOR
@@ -10,7 +10,7 @@
 En esta practica se empleara hasta el ultimo dia permitido para terminar y pulir la practica.
 
 **Estado del juego en el dia viernes 25 de mayo de 2023 / Video explicatorio:**
-
+- [Enlace al Video Explicatorio](https://youtu.be/QRERKtCOj5c)
 
 **Estado del juego en el dia viernes 19 de mayo de 2023:**
 - El personaje que controla el jugador completamente terminado, con todas las acciones mencionadas mas abajo.
@@ -600,7 +600,7 @@ public class IdleState : State
 
 **JEFE**
 
-Para un uso mas sencillo y organizado de la IA, he clasificado todas las posibles acciones como ScriptableObjects facilmente modificables.
+Para un uso mas sencillo y organizado de la IA, he clasificado todas las posibles acciones como ScriptableObjects facilmente modificables.</br>
 <img src="https://github.com/NachoDelCastillo/IAV23-DelCastilloRubio/blob/main/ReadmeImages/Acciones.PNG" />
 En estas acciones se pueden observar diferentes parametros, los cuales se tienen en cuenta desde el estado de combate dependiendo del contexto:
 **ActionAnimation : ** Nombre de la animacion que realiza la accion
@@ -640,25 +640,26 @@ En estas acciones se pueden observar diferentes parametros, los cuales se tienen
 
 </br></br>
 ## CREDITOS
-Estos son los recursos externos que he empleado en la creacion de este juego
+Estos son los recursos externos que he empleado en la creacion de este juego.
+Todos ellos tienen licencia comerciable siempre que se les acredite dentro del juego.
 
-</br>
-**SHADERS**
+</br></br>
+SHADERS</br>
 com.unity.toonshader - Unity Technologies
 Stylized bomb effect - Daniel Ilett
 Stylised Grass - Daniel Ilett
 Cartoon Fire - A Bit Of Game Dev
 
-</br>
-**FONTS**
+</br></br>
+FONTS</br>
 Edo - Vic Fieger
 
-</br>
-**ANIMATIONS**
+</br></br>
+ANIMATIONS</br>
 All Animations - Mixamo
 
-</br>
-**3D MODELS**
+</br></br>
+3D MODELS</br>
 Golem - Tink
 Spirited Away Chihiro - Jade L
 Stylized Sword - a_wilczek
@@ -668,8 +669,8 @@ Dungeon Pillar - ekaterina krasnova
 Rune Stone - Danciu Cristian-Alexa
 Stylized Skull - Max Doroszewski
 
-</br>
-**SKYBOX**
+</br></br>
+SKYBOX</br>
 Fantasy Skybox - Render Knight
 
 <!--
