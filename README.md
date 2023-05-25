@@ -643,22 +643,22 @@ En estas acciones se pueden observar diferentes parametros, los cuales se tienen
 Estos son los recursos externos que he empleado en la creacion de este juego
 
 </br>
-**SHADERS**
+**SHADERS**</br>
 com.unity.toonshader - Unity Technologies
 Stylized bomb effect - Daniel Ilett
 Stylised Grass - Daniel Ilett
 Cartoon Fire - A Bit Of Game Dev
 
 </br>
-**FONTS**
+**FONTS**</br>
 Edo - Vic Fieger
 
 </br>
-**ANIMATIONS**
+**ANIMATIONS**</br>
 All Animations - Mixamo
 
 </br>
-**3D MODELS**
+**3D MODELS**</br>
 Golem - Tink
 Spirited Away Chihiro - Jade L
 Stylized Sword - a_wilczek
