@@ -1,6 +1,6 @@
 # IAV23-DelCastilloRubio
 
-## FLAME SOULS
+## FLAME DEMONS
 <td><img src="https://github.com/NachoDelCastillo/IAV23-DelCastilloRubio/blob/main/ReadmeImages/Portada.PNG" /></td>
 
 ## AUTOR
@@ -10,7 +10,7 @@
 En esta practica se empleara hasta el ultimo dia permitido para terminar y pulir la practica.
 
 **Estado del juego en el dia viernes 25 de mayo de 2023 / Video explicatorio:**
-
+- [Video Explicatorio](https://www.youtube.com/watch?v=jQhfP79H09g&ab_channel=Shirrako)
 
 **Estado del juego en el dia viernes 19 de mayo de 2023:**
 - El personaje que controla el jugador completamente terminado, con todas las acciones mencionadas mas abajo.
