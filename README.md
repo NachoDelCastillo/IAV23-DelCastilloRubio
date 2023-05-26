@@ -601,7 +601,7 @@ public class IdleState : State
 **JEFE**
 
 Para un uso mas sencillo y organizado de la IA, he clasificado todas las posibles acciones como ScriptableObjects facilmente modificables.</br>
-<img src="https://github.com/NachoDelCastillo/IAV23-DelCastilloRubio/blob/main/ReadmeImages/Acciones.PNG" />
+<img src="https://github.com/NachoDelCastillo/IAV23-DelCastilloRubio/blob/main/ReadmeImages/Acciones.PNG" /></br>
 En estas acciones se pueden observar diferentes parametros, los cuales se tienen en cuenta desde el estado de combate dependiendo del contexto:
 **ActionAnimation : ** Nombre de la animacion que realiza la accion
 **AttackScore : ** Probabilidad de que un ataque sea elegido sobre el resto, para elegir un ataque, todos los ataques posibles en cada frame se suman a una misma variable, cada uno sumando su respectiva Score, despues se elige una aleatoria, mientras mas Score tenga la accion, mas probabilidad de ejecutarse sobre las demas.  
