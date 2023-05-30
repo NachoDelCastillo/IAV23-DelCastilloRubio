@@ -11,11 +11,14 @@ namespace NX {
 
     public class AttackState : State
     {
+        // Los estados a los que puede saltar directamente este estado
         public CombatState combatStanceState;
         public RotateTowardsTargetState rotateTowardsTargetState;
         public PursueState pursueTargetState;
         public EnemyAttackAction currentAttack;
 
+        // Se pone a true cuando ya se ha ejecutado la animacion correspondiente
+        // y se han actualizado las variables relacionadas
         public bool hasPerformedAttack = false;
 
         public override State Tick(EnemyManager enemyManager, EnemyStats enemyStats, EnemyAnimatorHandler enemyAnimatorHandler)
