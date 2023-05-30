@@ -1,5 +1,10 @@
 # IAV23-DelCastilloRubio
 
+**Cambios realizados teniendo en cuenta la revision preliminar (martes, 30 de mayo de 2023):**
+- Se ha añadido un diagrama de estados en el apartado "ESTADOS"
+- Se ha resaltado en negrita la localizacion de los scripts relevantes para la IA en el apartado "INFRAESTRUCTURA"
+- Se ha documentado mas en detalle los scripts relacionados con la IA dentro del proyecto
+
 ## FLAME DEMONS
 <td><img src="https://github.com/NachoDelCastillo/IAV23-DelCastilloRubio/blob/main/ReadmeImages/Portada.PNG" /></td>
 
@@ -93,7 +98,7 @@ Tambien es el encargado de gestionar el funcionamiento y transicion de estados d
 
 </br></br>
 ****ESTADOS****</br>
-<td><img src="https://github.com/NachoDelCastillo/IAV23-DelCastilloRubio/blob/main/ReadmeImages/DiagramaEstados.jpg" /></td>
+<td><img src="https://github.com/NachoDelCastillo/IAV23-DelCastilloRubio/blob/main/ReadmeImages/DiagramaEstados_.jpg" /></td>
 
 Para gestionar los estados, estos mismos heredan de la clase **State**, la cual solo tiene el metodo Tick, el cual se llamara desde la maquina de estados del enemyManager dependiendo del estado actual del Jefe.</br>
 En este metodo "Tick" se añade la funcionalidad particular de cada estado, en la cual se puede cambiar de estado facilmente usando el "return" con un estado distinto, o usando "return this" si se quiere permanecer en el mismo estado.
