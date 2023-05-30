@@ -77,8 +77,9 @@ Pero como el ataque cuerpo a cuerpo es la unica opcion para el jugador, estara o
 </br>
 SCRIPTS DEL JEFE</br>
 
-Para el funcionamiento del juego presentado, han sido necesarios muchos scripts extra que no tienen nada que ver con la Inteligencia Artificial del Enemigo. Por lo que no se mencionaran en la documentación.
-Los scripts relevantes para la inteligencia artificial del enemigo son los siguientes: (Assets/Scripts/A.I):
+Para el funcionamiento del juego presentado, han sido necesarios muchos scripts extra que no tienen nada que ver con la Inteligencia Artificial del Enemigo. Por lo que no se mencionaran en la documentación.</br>
+
+**Los scripts relevantes para la inteligencia artificial del enemigo son los siguientes: (Assets/Scripts/A.I):**
 
 - ****EnemyManager :**** </br> 
 Es el script principal del enemigo, en el se organiza el resto de funcionalidades repartidas en el resto de scripts.
