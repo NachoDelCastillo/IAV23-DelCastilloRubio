@@ -1,5 +1,10 @@
 # IAV23-DelCastilloRubio
 
+**Cambios realizados teniendo en cuenta la revision preliminar (martes, 30 de mayo de 2023):**
+- Se ha añadido un diagrama de estados en el apartado "ESTADOS"
+- Se ha resaltado en negrita la localizacion de los scripts relevantes para la IA en el apartado "INFRAESTRUCTURA"
+- Se ha documentado mas en detalle los scripts relacionados con la IA dentro del proyecto
+
 ## FLAME DEMONS
 <td><img src="https://github.com/NachoDelCastillo/IAV23-DelCastilloRubio/blob/main/ReadmeImages/Portada.PNG" /></td>
 
