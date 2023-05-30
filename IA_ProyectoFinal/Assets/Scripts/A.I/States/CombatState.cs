@@ -23,16 +23,17 @@ namespace NX
     // En este estado, el enemigo decide de que forma acercarse al jugador dependiendo
     // de la variable "combatWalkingTypes", facilmente modificable
 
-
-
     public class CombatState : State
     {
+        // Estados a los que puede cambiar el enemigo
         public IdleState idleState;
         public AttackState attackState;
         public PursueState pursueTargetState;
 
+        // Conjunto de los posibles ataques que puede realizar el enemigo
         public EnemyAttackAction[] enemyAttacks;
 
+        // Velocidad a la que rota el enemigo
         float rotationSpeed;
 
         // Velocidad a la que rota normalmente
@@ -42,13 +43,18 @@ namespace NX
 
         // Caminar de una de las formas designadas en el modo combate
         bool randomDestinationSet = false;
+        // Movimiento adelante/atras
         float verticalMovementValue = 0;
+        // Movimiento iquierda/derecha
         float horizontalMovementValue = 0;
 
+        // Temporizador para decidir cuando cambiar el estido de andar
         float randomMovementTimer = 0;
         float maxMovementTime = 6;
         float minMovementTime = 3;
 
+        // Variable que muestra el nombre del ultimo ataque realizado
+        // Se utiliza para impedir que se ejecute el mismo ataque dos veces seguidas
         string lastAttackName = "";
 
         public override State Tick(EnemyManager enemyManager, EnemyStats enemyStats, EnemyAnimatorHandler enemyAnimatorHandler)
@@ -126,14 +132,18 @@ namespace NX
         // Gira hacia el jugador de forma suave
         static public void HandleRotateTowardsTarget(EnemyManager enemyManager)
         {
+            // Direccion desde el enemigo hasta el jugador
             Vector3 direction = enemyManager.currentTarget.transform.position - enemyManager.transform.position;
             direction.y = 0;
             direction.Normalize();
 
+            // Si no hay direccion, simplemente coger la de delante del enemigo
             if (direction == Vector3.zero)
                 direction = enemyManager.transform.forward;
 
+            // Rotacion ideal
             Quaternion targetRotation = Quaternion.LookRotation(direction);
+            // Rotar hacia esa rotacion ideal de manera suave, no de golpe
             enemyManager.transform.rotation = Quaternion.Slerp
                 (enemyManager.transform.rotation, targetRotation, 3 * Time.deltaTime);
         }
@@ -141,9 +151,12 @@ namespace NX
         // Diferentes tipos de acercarse al jugador
         struct CombatWalkingType
         {
+            // Velocidad a la que se mueve adelante/atras
             public float verticalMovementValue;
+            // Velocidad a la que se mueve izquierda/derecha
             public float horizontalMovementValue;
 
+            // Constructor del tipo de andar
             public CombatWalkingType(float _verticalMovementValue, float _horizontalMovementValue)
             {
                 verticalMovementValue = _verticalMovementValue;
@@ -151,6 +164,7 @@ namespace NX
             }
         }
 
+        // Conjunto de todos los tipos de andar registrados para este enemigo
         CombatWalkingType[] combatWalkingTypes;
         int currentWalkTypeIndex = 0;
 
@@ -201,6 +215,7 @@ namespace NX
                 if (distanceFromTarget <= enemyAttackAction.maximumDistanceNeededToAttack
                     && distanceFromTarget >= enemyAttackAction.minimumDistanceNeededToAttack)
                 {
+                    // Si esta entre los angulos ideales
                     if (viewableAngle <= enemyAttackAction.maximunAttackAngle
                         && viewableAngle >= enemyAttackAction.minimumAttackAngle)
                     {
@@ -212,7 +227,9 @@ namespace NX
                 }
             }
 
+            // Elegir un valor aleatorio
             int randomValue = Random.Range(0, maxScore);
+            // En esta variable se almacenaran todas las scores de todos los ataques
             int temporaryScore = 0;
 
             // Se elige un ataque de esos teniendo en cuenta la probabilidad de cada uno
@@ -220,9 +237,11 @@ namespace NX
             {
                 EnemyAttackAction enemyAttackAction = enemyAttacks[i];
 
+                // Si esta a la distancia ideal
                 if (distanceFromTarget <= enemyAttackAction.maximumDistanceNeededToAttack
                     && distanceFromTarget >= enemyAttackAction.minimumDistanceNeededToAttack)
                 {
+                    // Si esta entre los angulos ideales
                     if (viewableAngle <= enemyAttackAction.maximunAttackAngle
                         && viewableAngle >= enemyAttackAction.minimumAttackAngle)
                     {
@@ -234,6 +253,7 @@ namespace NX
 
                         temporaryScore += enemyAttackAction.attackScore;
 
+                        // Seleccionar este ataque
                         if (temporaryScore > randomValue)
                         {
                             attackState.currentAttack = enemyAttackAction;

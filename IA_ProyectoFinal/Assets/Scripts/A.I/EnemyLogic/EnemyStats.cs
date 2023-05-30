@@ -10,6 +10,7 @@ namespace NX
         EnemyManager enemyManager;
         Animator anim;
 
+        // Elementos de la Interfaz
         [SerializeField]
         Image fill;
 
@@ -22,6 +23,7 @@ namespace NX
 
         private void Awake()
         {
+            // Referencias
             enemyManager = GetComponent<EnemyManager>();
             anim = GetComponentInChildren<Animator>();
         }
@@ -33,6 +35,8 @@ namespace NX
 
         private void Update()
         {
+            // Actualizar barra de vida
+
             float healthAmount = ((float)currentHealth / (float)maxHealth);
 
             fill.fillAmount = Mathf.Lerp(fill.fillAmount, healthAmount, Time.deltaTime * 2);
@@ -41,6 +45,8 @@ namespace NX
         }
 
 
+        // Se encarga de procesar la accion de recibir daño, actualizando las variables necesarias
+        // y actualizando la interfaz del enemigo en consecuencia
         Vector3 particleOffset = new Vector3(0, 4, 0);
         public void TakeDamage(int damage)
         {
@@ -72,6 +78,7 @@ namespace NX
             }
         }
 
+        // Cuando el enemigo es derrotado, se llama a esta coroutina para apagar el fuego de su cabeza
         IEnumerator FlameStop()
         {
             yield return new WaitForSeconds(2f);

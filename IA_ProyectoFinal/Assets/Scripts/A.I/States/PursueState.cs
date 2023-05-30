@@ -29,21 +29,26 @@ namespace NX
                 return rotateTowardsTargetState;
 
 
+            // Si se esta realizando una accion en mitad del proceso de persecucion
             if (enemyManager.isPerformingAction)
             {
+                // No dejar moverse
                 enemyAnimatorHandler.anim.SetFloat("Vertical", 0, 0.1f, Time.deltaTime);
 
                 // Si se esta en medio de un ataque y se permite rotar en el ataque
                 if (enemyManager.canRotate)
                     CombatState.HandleRotateTowardsTarget(enemyManager);
 
+                // Devolver el mismo estado, para que en la siguiente iteracion, vuelva a ejecutar este estado
                 return this;
             }
 
-
+            // Si todavia no se esta lo suficientemente cerca como para entrar en el estado de combate
+            // Hacer que el modelo del personaje camine directamente hacia adelante
             if (distanceFromTarget > enemyManager.maximumAggroRadius)
                 enemyAnimatorHandler.anim.SetFloat("Vertical", 1, 0.1f, Time.deltaTime);
 
+            // Mantener el objeto que contiene al navmesh en el punto de origen en todo momento
             enemyManager.navMeshAgent.transform.localPosition = Vector3.zero;
             enemyManager.navMeshAgent.transform.localRotation = Quaternion.identity;
 
